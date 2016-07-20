@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<plugin>
+
+	<extension-point id="service" name="Proof Service" schema="schema/${extensionId}.exsd"/>
+	
+    <extension id="ProofBasedExplanation"
+               point="org.protege.editor.owl.explanation">
+        <name value="Proof Based Explanation"/>
+        <class value="${pluginId}.ProofBasedExplanationService"/>
+    </extension>
+
+    <extension id="ProofBasedInconsistencyExplanation"
+               point="org.protege.editor.owl.inconsistentOntologyExplanation">
+        <name value="Proof Based Inconsistent Ontology Explanation"/>
+        <class value="${pluginId}.ProofBasedInconsistencyExplanationPlugin"/>        
+    </extension>
+
+</plugin>

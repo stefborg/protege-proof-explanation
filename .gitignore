@@ -1,0 +1,8 @@
+target/
+META-INF/
+plugin.xml
+.settings/
+.classpath
+.project
+.idea
+*.iml

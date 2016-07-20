@@ -1,0 +1,29 @@
+The Live Ontologies Project team is pleased to announce 
+        the Protege Proof-Based Explanation 0.1.0 release!
+
+This is a plug-in that adds proof-based explanation facilities to the Protege 
+Desktop ontology editor. It registers as an extension to the Protege 
+explanation services and defines an extension point using which OWL proofs can 
+be provided by other Protege plug-ins. The main functionality of this plug-in 
+is displaying, navigating, and updating those proofs in the user interface.
+
+Changes in this version:
+------------------------
+New features:
+- Use Protege OWL Frame List to display proofs; axioms can be edited and deleted; proofs are expanded upon triggering the explain button. 
+- Highlight premises if an inference is selected in the list. 
+- Eliminate cycles in proofs: a proof for an axiom will not use this axioms as one of the premises [owlapi-proof bundle]. 
+- Update proof after changes in the ontologies without recomputing the proof: if an axiom is changed or removed it is removed from the asserted axioms of the proof. 
+- Simplify cycle elimination using convenient utilities for testing derivability [owlapi-proof bundle]. 
+- Define an extension point for proof services; add management of proof services in the UI. 
+- Add a manager to keep track of import closure to quickly check if an axiom is asserted. 
+- Support axioms from import ontologies in proofs, including management of duplicate axioms. 
+- Reuse the display setting (e.g., row expansion state, selection) for proof parts remained after proof changes. 
+- Support axioms with annotations and adding annotations to axioms in the proofs. 
+- Add tree-like navigation elements to the proofs UI; kept in synch with the current UI look and feel. 
+- Expand and collapse rows recursively after long mouse press or ALT + click; a recursive expansion limit is used to avoid UI lockup in cases with huge proofs. 
+- Optimize rendering of proofs after expansion/collapse/resize by caching row heights values for list width values. 
+
+
+Have fun!
+- Live Ontologies Project team
