@@ -1,0 +1,18 @@
+language: java
+git:
+  depth: 3
+matrix:
+  include:
+  - jdk: oraclejdk7
+    env: DEPLOY=true
+  - jdk: openjdk7
+  - jdk: oraclejdk8
+install: mvn install -DskipTests=true
+script: mvn test -Dassembly.skipAssembly=true -B
+after_success:
+  - test "$DEPLOY" = true -a "$TRAVIS_PULL_REQUEST" = false 
+    && mvn deploy --settings .travis-settings.xml -DskipTests=true -B
+env:
+  global:
+  - secure: MdUrYGK2zUrSi4VUuo6MiY3n/a05biaISq9MvgnrCNRBdTIBNQZCSxOcYrSi55++iuGI5coL15JTpdr7Awe4S9FqXkjmsRRAfvl9U9VOUo0AECqqj6T30Z3bYQ3SFnAFgN2BtOyM/H0FnHzw66K+w29pTTyTQIOsRCFEUDbZT9sT5x9InRKeysTWjMzSUV/8+oF97/GAwkwwhi1d+flE8zfN/FXt57geDq7xrPo/MwSO09ifK5lPxzLUdDTZWI8L0t0f2r8PExB0NZjs8UyXVeDCapq0YCEaoMuKSw9h/zbsPdyvfmSY0FMy3gSrDeWlvzRp1TJY0GNc3TII7uB3Hx7KW3b/j0j/RN4WoyMbPhBYV000bEgZRU3gtqJ1jF4yIwT5wy1ruYQKCOE/bV/0XH9g6Exb+XHT6+gYH5Vu0m7dwBmSQbD6A8rDEMfv0yp/OjDqiep9Ol0VbAxEc4p+9Y2/70VrpyWAEyJYRCJAsKfUFHFhA0um+emL5mfgJhce2ebpwKi/s68/puvc8n3jxlIKmDQjN1K6ewqPP0Cz4iLmtwvNi3Jg6SHFkbR+cgj1YVAlne58os9ZDvN/Toyvw+TXypEn5YzQLI4rH+rwdkdiDfe3W1Ihwx2WF+XfRgqF4NsuDUyrjLItxKgy6+1B0s/fsf5lM2pUGiR5p9i1B1M=
+  - secure: PVPaGhzdoT9f7ePr7UieVmAelaFihtnfRELNK07ZSzrJSYRIqcrcIU5t7FDqVUIU0K/ZFFkRHrZFaY1s0hwzPO9KKAM/MkMJ61UA7Jz+enWFvFb3fTs8rf8UaGTgRH8EqRNF9oQ9/bziAWhEI5umVP7Z9RTDpvD4g+KJ4PtiyhtZ1Cyulxiut65Gaj1um/zVdw5wTuKQAArl6OL56i06GzKSYvUBxfaai7qZuZXw7+DTRzWcuHHgASTldrWUtTFlzeQ5m5e3onXzEHD7+DD5KDcDrq1O0hID5efGVmb2uyfSbWfNVjKw7dQ/gbCsJx4MUM8XCdneAyIr5nHHxeaMLXQh138Smsv+7Xbx27mjobh1kJbDAlps1Nr/Jyv5XF3MEKGa48R2ULMzDNwN8suxn4dxiMw0+u4ZcpqUpJr1pboaRzfDjQpChMsR3+odr9dK/UjJi+DfZeg2QauHMNY1DBxnOeQU7wNJRL1otSh3v6Fgg01SNsNu95Ktmzfg8U0ZmULp7dwrbUa2QsQcBiCW8VTFtc6RCJA1ceLqiQ+6qgA2u2e+GWrF/VXF4QvvJ7b4/i3JBPMtLSlFHyNILAnKo5NGoFR35WBDN1fc09seixKR2i4T7blNe1pS2+O/wT3ZUPx5SJlQ1yDpDEQsAuljqdfeXirvkhab6nbIKqlV8mo=
