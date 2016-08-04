@@ -38,8 +38,8 @@ To install, place all jar files inside the archive
 
 	protege-proof-explanation-0.1.0-SNAPSHOT.zip 
 
-to the plug-ins folder of the Protege installation. The plug-in supports 
-Protege Auto Update feature which can be used for upgrading to newer versions 
-according to the instructions here:
+to the plugins folder of the Protege installation. The plug-in supports Protege
+Auto Update feature which can be used for upgrading to newer versions according
+to the instructions here:
 
     http://protegewiki.stanford.edu/wiki/EnablePluginAutoUpdate
