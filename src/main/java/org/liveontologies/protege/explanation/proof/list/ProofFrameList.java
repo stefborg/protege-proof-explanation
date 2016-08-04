@@ -231,11 +231,13 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		LEFT_CHILD_INDENT = (int) UIManager.get("Tree.leftChildIndent");
 		RIGHT_CHILD_INDENT = (int) UIManager.get("Tree.rightChildIndent");
 		PAINT_LINES = UIManager.getBoolean("Tree.paintLines");
+		// TODO: switch when supported to: PAINT_LINES =
+		// OWLTreePreferences.getInstance().isPaintLines();
 		LINE_TYPE_DASHED = UIManager.getBoolean("Tree.lineTypeDashed")
 				// the plastic UI does not set dash lines although uses them
 				|| UIManager.getLookAndFeel().getClass().getName()
 						.equals(ProtegeProperties.PLASTIC_LAF_NAME);
-		LINE = (Color) UIManager.get("Tree.line");
+		LINE = UIManager.getColor("Tree.hash");
 	}
 
 	/**
