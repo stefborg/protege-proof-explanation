@@ -31,10 +31,9 @@
 				<include>${project.groupId}:*:*</include>
 			</includes>
 			<useStrictFiltering>true</useStrictFiltering>
-			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+			<useProjectArtifact>false</useProjectArtifact>
 		</dependencySet>
 		<dependencySet>
-			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
 			<useProjectArtifact>true</useProjectArtifact>
 		</dependencySet>
 	</dependencySets>
