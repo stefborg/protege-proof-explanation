@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.liveontologies.owlapi.proof.util.LeafProofNode;
-import org.liveontologies.owlapi.proof.util.OWLProofUtils;
+import org.liveontologies.owlapi.proof.util.ProofNodes;
 import org.liveontologies.owlapi.proof.util.ProofNode;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.Disposable;
@@ -145,7 +145,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			proofRoot_ = proofService_ == null
 					? new LeafProofNode<OWLAxiom>(entailment_)
 					: proofService_.getProof(entailment_);
-			proofRoot_ = OWLProofUtils.eliminateNotDerivableAndCycles(
+			proofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(
 					proofRoot_,
 					importsClosureRec_.getStatedAxiomsWithoutAnnotations());
 			proofRootUpToDate_ = true;

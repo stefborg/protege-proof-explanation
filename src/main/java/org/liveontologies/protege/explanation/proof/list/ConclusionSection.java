@@ -81,9 +81,9 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 	private final boolean editable_;
 
 	/**
-	 * {@code true} if this row can be expanded and collapsed
+	 * {@code true} if the axiom in this section is inferred
 	 */
-	private final boolean expandable_;
+	private final boolean inferred_;
 
 	/**
 	 * {@code true} if the inferences for the conclusion should be shown
@@ -111,8 +111,8 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 				.getHomeOntologies(key);
 		this.editable_ = isAsserted()
 				&& getAxiomChecker().isParsable(getAxiom());
-		this.expandable_ = !conclusion.getInferences().isEmpty();
-		if (!expandable_) {
+		this.inferred_ = !conclusion.getInferences().isEmpty();
+		if (!inferred_) {
 			expanded_ = true;
 		}
 	}
@@ -133,7 +133,7 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 
 	@Override
 	public boolean isExpandable() {
-		return expandable_;
+		return isInferred();
 	}
 
 	@Override
@@ -179,7 +179,7 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 
 	@Override
 	public boolean isInferred() {
-		return !conclusion_.getInferences().isEmpty();
+		return inferred_;
 	}
 
 	@Override
