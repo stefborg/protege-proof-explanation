@@ -28,6 +28,8 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -39,6 +41,10 @@ import com.google.common.collect.ListMultimap;
  *
  */
 public class ImportsClosureRecord {
+
+	// logger for this class
+	private static final Logger LOGGER_ = LoggerFactory
+			.getLogger(ImportsClosureRecord.class);
 
 	/**
 	 * the ontology which import closure is maintained by this object
@@ -159,8 +165,14 @@ public class ImportsClosureRecord {
 		importsClosure_ = null;
 		originalAxioms_.clear();
 		axiomOccurrences_.clear();
-		for (ChangeListener listener : listeners_) {
-			listener.statedAxiomsChanged();
+		int i = 0;
+		try {
+			for (; i < listeners_.size(); i++) {
+				listeners_.get(i).statedAxiomsChanged();
+			}
+		} catch (Throwable e) {
+			LOGGER_.warn("Remove the listener due to an exception", e);
+			removeListener(listeners_.get(i));
 		}
 		return true;
 	}

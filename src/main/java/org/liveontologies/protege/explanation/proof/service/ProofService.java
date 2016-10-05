@@ -31,6 +31,8 @@ import org.protege.editor.core.plugin.ProtegePluginInstance;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.reasoner.UnsupportedEntailmentTypeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A skeleton for a plugin that can provide proofs for OWL axioms
@@ -39,6 +41,10 @@ import org.semanticweb.owlapi.reasoner.UnsupportedEntailmentTypeException;
  *
  */
 public abstract class ProofService implements ProtegePluginInstance {
+
+	// logger for this class
+	private static final Logger LOGGER_ = LoggerFactory
+			.getLogger(ProofService.class);
 
 	private OWLEditorKit kit_;
 	private String pluginId_;
@@ -102,8 +108,14 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 * {@link #getProof(OWLAxiom)} may be no longer up to date
 	 */
 	protected void fireProofChanged() {
-		for (ChangeListener listener : listeners_) {
-			listener.proofChanged();
+		int i = 0;
+		try {
+			for (; i < listeners_.size(); i++) {
+				listeners_.get(i).proofChanged();
+			}
+		} catch (Throwable e) {
+			LOGGER_.warn("Remove the listener due to an exception", e);
+			removeListener(listeners_.get(i));
 		}
 	}
 

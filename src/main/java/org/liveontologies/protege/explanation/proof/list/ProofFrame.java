@@ -121,12 +121,10 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 
 	public void updateProof() {
 		ProofNode<OWLAxiom> newProof = man_.getProofRoot();
-		setRootObject(
-				new ProofRoot(man_.getEntailment(),
-						newProof == null
-								? Collections.<ProofNode<OWLAxiom>> emptySet()
-								: Collections.singleton(newProof),
-						renderer_));
+		setRootObject(new ProofRoot(man_.getEntailment(),
+				newProof == null ? Collections.<ProofNode<OWLAxiom>> emptySet()
+						: Collections.singleton(newProof),
+				renderer_));
 	}
 
 	@Override
@@ -173,13 +171,14 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 
 	@Override
 	public synchronized void fireContentChanged() {
-		for (OWLFrameListener listener : listeners_) {
-			try {
-				listener.frameContentChanged();
-			} catch (Exception e) {
-				LOGGER_.error("Error during processing of content changes: {}",
-						e);
+		int i = 0;
+		try {
+			for (; i < listeners_.size(); i++) {
+				listeners_.get(i).frameContentChanged();
 			}
+		} catch (Throwable e) {
+			LOGGER_.warn("Remove the listener due to an exception", e);
+			removeFrameListener(listeners_.get(i));
 		}
 	}
 

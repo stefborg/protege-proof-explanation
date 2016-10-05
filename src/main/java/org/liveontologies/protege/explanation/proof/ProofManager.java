@@ -27,13 +27,15 @@ import java.util.Collection;
 import java.util.List;
 
 import org.liveontologies.owlapi.proof.util.LeafProofNode;
-import org.liveontologies.owlapi.proof.util.ProofNodes;
 import org.liveontologies.owlapi.proof.util.ProofNode;
+import org.liveontologies.owlapi.proof.util.ProofNodes;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.Disposable;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An object to manage the proof for a particular entailed {@link OWLAxiom}
@@ -42,6 +44,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
  */
 public class ProofManager implements ImportsClosureRecord.ChangeListener,
 		ProofService.ChangeListener, Disposable {
+
+	// logger for this class
+	private static final Logger LOGGER_ = LoggerFactory
+			.getLogger(ProofManager.class);
 
 	/**
 	 * proof services
@@ -145,8 +151,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			proofRoot_ = proofService_ == null
 					? new LeafProofNode<OWLAxiom>(entailment_)
 					: proofService_.getProof(entailment_);
-			proofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(
-					proofRoot_,
+			proofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(proofRoot_,
 					importsClosureRec_.getStatedAxiomsWithoutAnnotations());
 			proofRootUpToDate_ = true;
 		}
@@ -221,8 +226,14 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 		// else
 		proofRootUpToDate_ = false;
 		proofRoot_ = null;
-		for (ChangeListener listener : listeners_) {
-			listener.proofRootChanged();
+		int i = 0;
+		try {
+			for (; i < listeners_.size(); i++) {
+				listeners_.get(i).proofRootChanged();
+			}
+		} catch (Throwable e) {
+			LOGGER_.warn("Remove the listener due to an exception", e);
+			removeListener(listeners_.get(i));
 		}
 		return true;
 	}
