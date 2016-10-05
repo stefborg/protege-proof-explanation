@@ -147,7 +147,6 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 */
 	public synchronized ProofNode<OWLAxiom> getProofRoot() {
 		if (!proofRootUpToDate_) {
-			proofService_.getProof(entailment_);
 			proofRoot_ = proofService_ == null
 					? new LeafProofNode<OWLAxiom>(entailment_)
 					: proofService_.getProof(entailment_);
