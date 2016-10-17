@@ -122,8 +122,8 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 	public void updateProof() {
 		ProofNode<OWLAxiom> newProof = man_.getProofRoot();
 		setRootObject(new ProofRoot(man_.getEntailment(),
-				newProof == null ? Collections.<ProofNode<OWLAxiom>> emptySet()
-						: Collections.singleton(newProof),
+				newProof == null ? Collections.<ProofNode<OWLAxiom>> emptyList()
+						: Collections.singletonList(newProof),
 				renderer_));
 	}
 

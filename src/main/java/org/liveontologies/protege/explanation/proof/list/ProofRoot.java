@@ -24,6 +24,7 @@ package org.liveontologies.protege.explanation.proof.list;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.liveontologies.owlapi.proof.util.ProofNode;
 import org.liveontologies.owlapi.proof.util.ProofStep;
@@ -38,12 +39,13 @@ public class ProofRoot implements ProofStep<OWLAxiom>, ProofNode<OWLAxiom> {
 
 	private final OWLAxiom member_;
 
-	private final Collection<? extends ProofNode<OWLAxiom>> premises_;
-	
+	private final List<? extends ProofNode<OWLAxiom>> premises_;
+
 	private final OWLRenderer renderer_;
 
 	ProofRoot(final OWLAxiom member,
-			Collection<? extends ProofNode<OWLAxiom>> premises, OWLRenderer renderer) {
+			List<? extends ProofNode<OWLAxiom>> premises,
+			OWLRenderer renderer) {
 		this.member_ = member;
 		this.premises_ = premises;
 		this.renderer_ = renderer;
@@ -60,7 +62,7 @@ public class ProofRoot implements ProofStep<OWLAxiom>, ProofNode<OWLAxiom> {
 	}
 
 	@Override
-	public Collection<? extends ProofNode<OWLAxiom>> getPremises() {
+	public List<? extends ProofNode<OWLAxiom>> getPremises() {
 		return premises_;
 	}
 
