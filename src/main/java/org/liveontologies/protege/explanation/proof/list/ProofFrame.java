@@ -137,6 +137,10 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 
 	@Override
 	public void setRootObject(ProofRoot newRoot) {
+		if (root_ == newRoot) {
+			// already set;
+			return;
+		}
 		root_ = newRoot;
 		InferenceSection previousRootSection = rootSection_;
 		rootSection_ = null;

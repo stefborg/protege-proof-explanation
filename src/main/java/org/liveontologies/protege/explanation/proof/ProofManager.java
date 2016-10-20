@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.liveontologies.owlapi.proof.OWLProofNode;
 import org.liveontologies.owlapi.proof.util.LeafProofNode;
 import org.liveontologies.owlapi.proof.util.ProofNode;
 import org.liveontologies.owlapi.proof.util.ProofNodes;
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * @author Yevgeny Kazakov
  */
 public class ProofManager implements ImportsClosureRecord.ChangeListener,
-		ProofService.ChangeListener, Disposable {
+		OWLProofNode.ChangeListener, Disposable {
 
 	// logger for this class
 	private static final Logger LOGGER_ = LoggerFactory
@@ -65,23 +66,25 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	private final ImportsClosureRecord importsClosureRec_;
 
 	/**
-	 * the service used to retrieve the proof for the {@link #entailment_}
+	 * the proof node for {@link #entailment_} returned by the proof service;
+	 * all inferences can be accessed from that
 	 */
-	private ProofService proofService_ = null;
+	private OWLProofNode proofRoot_ = null;
 
 	/**
-	 * the first proof node from which all inferences can be accessed
+	 * the result of applying the transformation (e.g., elimination of cycles)
+	 * to {@link #proofRoot_}; its inferences will be actually displayed
 	 */
-	private ProofNode<OWLAxiom> proofRoot_ = null;
+	private ProofNode<OWLAxiom> processedProofRoot_ = null;
 
 	/**
-	 * {@code true} if {@link #proofRoot_} reflects the one maintained by
+	 * {@code true} if {@link #processedProofRoot_} reflects the one maintained by
 	 * {@link #proofService_}
 	 */
 	private boolean proofRootUpToDate_ = false;
 
 	/**
-	 * the listeners to be notified when {@link #proofRoot_} is updated
+	 * the listeners to be notified when {@link #processedProofRoot_} is updated
 	 */
 	private final List<ChangeListener> listeners_ = new ArrayList<ChangeListener>();
 
@@ -128,14 +131,12 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * @see #getEntailment()
 	 */
 	public synchronized void setProofService(ProofService proofService) {
-		if (!proofService.equals(proofService_)) {
-			if (proofService_ != null) {
-				proofService_.removeListener(this);
-			}
-			proofService_ = proofService;
-			proofService.addListener(this);
-			invalidateProofRoot();
+		if (proofRoot_ != null) {
+			proofRoot_.removeListener(this);
 		}
+		proofRoot_ = proofService.getProof(entailment_);
+		proofRoot_.addListener(this);
+		invalidateProofRoot();
 	}
 
 	/**
@@ -147,14 +148,16 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 */
 	public synchronized ProofNode<OWLAxiom> getProofRoot() {
 		if (!proofRootUpToDate_) {
-			proofRoot_ = proofService_ == null
-					? new LeafProofNode<OWLAxiom>(entailment_)
-					: proofService_.getProof(entailment_);
-			proofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(proofRoot_,
-					importsClosureRec_.getStatedAxiomsWithoutAnnotations());
+			if (proofRoot_ == null) {
+				processedProofRoot_ = new LeafProofNode<OWLAxiom>(entailment_);
+			} else {
+				processedProofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(
+						proofRoot_,
+						importsClosureRec_.getStatedAxiomsWithoutAnnotations());
+			}
 			proofRootUpToDate_ = true;
 		}
-		return proofRoot_;
+		return processedProofRoot_;
 	}
 
 	public synchronized void addListener(ChangeListener listener) {
@@ -206,6 +209,9 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	@Override
 	public void dispose() {
 		importsClosureRec_.removeListener(this);
+		if (proofRoot_ != null) {
+			proofRoot_.removeListener(this);
+		}
 	}
 
 	@Override
@@ -214,7 +220,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	}
 
 	@Override
-	public void proofChanged() {
+	public void nodeChanged() {
 		invalidateProofRoot();
 	}
 
@@ -224,7 +230,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 		}
 		// else
 		proofRootUpToDate_ = false;
-		proofRoot_ = null;
+		processedProofRoot_ = null;
 		int i = 0;
 		try {
 			for (; i < listeners_.size(); i++) {

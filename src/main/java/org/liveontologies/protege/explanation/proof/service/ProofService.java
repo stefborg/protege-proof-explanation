@@ -1,8 +1,5 @@
 package org.liveontologies.protege.explanation.proof.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.liveontologies.owlapi.proof.OWLProofNode;
 
 /*
@@ -31,8 +28,6 @@ import org.protege.editor.core.plugin.ProtegePluginInstance;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.reasoner.UnsupportedEntailmentTypeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A skeleton for a plugin that can provide proofs for OWL axioms
@@ -42,14 +37,9 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ProofService implements ProtegePluginInstance {
 
-	// logger for this class
-	private static final Logger LOGGER_ = LoggerFactory
-			.getLogger(ProofService.class);
-
 	private OWLEditorKit kit_;
 	private String pluginId_;
 	private String name_;
-	private final List<ChangeListener> listeners_ = new ArrayList<ChangeListener>();
 
 	public ProofService setup(OWLEditorKit kit, String pluginId, String name) {
 		this.kit_ = kit;
@@ -75,14 +65,6 @@ public abstract class ProofService implements ProtegePluginInstance {
 		return getName();
 	}
 
-	public synchronized void addListener(ChangeListener listener) {
-		listeners_.add(listener);
-	}
-
-	public synchronized void removeListener(ChangeListener listener) {
-		listeners_.remove(listener);
-	}
-
 	/**
 	 * @param entailment
 	 * @return {@code true} if this service can provide a proof for the given
@@ -102,31 +84,5 @@ public abstract class ProofService implements ProtegePluginInstance {
 
 	@Override
 	public abstract void dispose();
-
-	/**
-	 * should be called when some of the previously returned result of
-	 * {@link #getProof(OWLAxiom)} may be no longer up to date
-	 */
-	protected void fireProofChanged() {
-		int i = 0;
-		try {
-			for (; i < listeners_.size(); i++) {
-				listeners_.get(i).proofChanged();
-			}
-		} catch (Throwable e) {
-			LOGGER_.warn("Remove the listener due to an exception", e);
-			removeListener(listeners_.get(i));
-		}
-	}
-
-	public static interface ChangeListener {
-
-		/**
-		 * signals that some proofs returned by
-		 * {@link ProofService#getProof(OWLAxiom)} is no longer up to date
-		 */
-		void proofChanged();
-
-	}
 
 }
