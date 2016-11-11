@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.liveontologies.owlapi.proof.util.Inference;
 import org.liveontologies.owlapi.proof.util.ProofNode;
 import org.liveontologies.owlapi.proof.util.ProofStep;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
@@ -79,6 +80,11 @@ public class ProofRoot implements ProofStep<OWLAxiom>, ProofNode<OWLAxiom> {
 	@Override
 	public String toString() {
 		return "Proof for " + renderer_.render(getMember());
+	}
+
+	@Override
+	public Inference<OWLAxiom> getExample() {
+		return null;
 	}
 
 }

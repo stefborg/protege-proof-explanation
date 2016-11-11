@@ -75,6 +75,11 @@ public interface ProofFrameListRow extends Disposable {
 	boolean isHighlighted();
 
 	/**
+	 * @return the text to be shown on mouse over
+	 */
+	String getTooltip();
+	
+	/**
 	 * Sets the index position of this row to the given value
 	 * 
 	 * @param index

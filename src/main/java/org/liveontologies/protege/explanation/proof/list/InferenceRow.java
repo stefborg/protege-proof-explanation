@@ -27,7 +27,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.liveontologies.owlapi.proof.util.Inference;
 import org.liveontologies.owlapi.proof.util.ProofNode;
+import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.frame.OWLFrameSection;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
@@ -96,6 +98,45 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 	@Override
 	public boolean isExpandable() {
 		return false;
+	}
+
+	@Override
+	public String getTooltip() {
+		Inference<OWLAxiom> example = section_.getInference().getExample();
+		if (example == null) {
+			return null;
+		}
+		OWLModelManager man = section_.getFrame().getEditorKit()
+				.getOWLModelManager();
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html>");
+		sb.append("<head>");
+		sb.append("<style>");
+		sb.append("ol li { margin: 4px 0; font-weight: bold; }");
+		sb.append("p { font-weight: bold; }");
+		sb.append("</style>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<p>");		
+		sb.append(man.getRendering(example.getConclusion()));
+		sb.append("</p>");
+		sb.append("<br>");
+		sb.append("&emsp;");
+		List<? extends OWLAxiom> premises = example.getPremises();
+		if (premises.isEmpty()) {
+			sb.append("is a tautology");
+		} else {
+			sb.append("is derived from:");
+		}
+		sb.append("<ol>");
+		for (int i = 0; i < premises.size(); i++) {
+			sb.append("<li>");
+			sb.append(man.getRendering(premises.get(i)));
+		}
+		sb.append("</ol>");
+		sb.append("</body>");
+		sb.append("</html>");
+		return sb.toString();
 	}
 
 	@Override

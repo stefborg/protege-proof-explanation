@@ -317,14 +317,16 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		// else
 		Point location = event.getPoint();
 		int index = locationToIndex(location);
-		if (index < 0) {
+		if (index < 0 || !getCellBound(index).contains(location)) {
 			return super.getToolTipText();
 		}
-		if (getCellBound(index).contains(location)) {
-			return super.getToolTipText(event);
+		// else
+		ProofFrameListRow row = getProofListModel().getElementAt(index);
+		if (row instanceof InferenceRow) {
+			return row.getTooltip();	
 		}
 		// else
-		return super.getToolTipText();
+		return super.getToolTipText(event);
 	}
 
 	protected void handleEnterKey(ProofFrameListRow row) {
