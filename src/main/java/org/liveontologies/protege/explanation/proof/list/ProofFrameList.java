@@ -65,6 +65,7 @@ import org.protege.editor.core.ProtegeProperties;
 import org.protege.editor.core.ui.list.MListItem;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.frame.OWLFrameListener;
+import org.protege.editor.owl.ui.frame.OWLFrameSectionRow;
 import org.protege.editor.owl.ui.framelist.OWLFrameList;
 import org.protege.editor.owl.ui.framelist.OWLFrameListInferredSectionRowBorder;
 import org.protege.editor.owl.ui.tree.OWLObjectTree;
@@ -409,6 +410,20 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				cellHasFocus);
 	}
 
+	@Override
+	protected String getRowName(Object rowObject) {
+		if (rowObject instanceof ConclusionSection) {
+			ConclusionSection conclusionSection = (ConclusionSection) rowObject;
+			if (conclusionSection.isAsserted()) {
+				return "Asserted axiom";
+			} else {
+				return "Entailed axiom";
+			}
+		}
+		// else
+		return super.getRowName(rowObject);
+	}
+	
 	@Override
 	protected Color getItemBackgroundColor(MListItem item) {
 		if (item instanceof ConclusionSection) {
