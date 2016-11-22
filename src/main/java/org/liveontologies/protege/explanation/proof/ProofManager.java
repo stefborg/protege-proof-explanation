@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.liveontologies.owlapi.proof.OWLProofNode;
 import org.liveontologies.owlapi.proof.util.LeafProofNode;
 import org.liveontologies.owlapi.proof.util.ProofNode;
@@ -216,12 +218,21 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 
 	@Override
 	public void statedAxiomsChanged() {
-		invalidateProofRoot();
+		invalidateProofRootLater();
 	}
 
 	@Override
 	public void nodeChanged() {
-		invalidateProofRoot();
+		invalidateProofRootLater();
+	}
+
+	private void invalidateProofRootLater() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				invalidateProofRoot();
+			}
+		});
 	}
 
 	private synchronized boolean invalidateProofRoot() {

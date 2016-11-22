@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.SwingUtilities;
+
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
@@ -123,7 +125,7 @@ public class ImportsClosureRecord {
 		return axiomOccurrences_.keySet();
 	}
 
-	Set<? extends OWLOntology> getImportsClosure() {
+	synchronized Set<? extends OWLOntology> getImportsClosure() {
 		return importsClosure_;
 	}
 
@@ -176,7 +178,16 @@ public class ImportsClosureRecord {
 		}
 		return true;
 	}
-
+	
+	void invalidateLater() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				invalidate();
+			}
+		});
+	}
+	
 	public interface ChangeListener {
 
 		void statedAxiomsChanged();

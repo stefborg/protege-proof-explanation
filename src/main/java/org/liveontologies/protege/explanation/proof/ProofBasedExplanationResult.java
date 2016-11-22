@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import org.liveontologies.protege.explanation.proof.list.ProofFrame;
 import org.liveontologies.protege.explanation.proof.list.ProofFrameList;
@@ -146,7 +147,12 @@ public class ProofBasedExplanationResult extends ExplanationResult
 
 	@Override
 	public void proofRootChanged() {
-		updateProofRoot();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateProofRoot();
+			}
+		});
 	}
 
 }

@@ -92,7 +92,7 @@ public class ImportsClosureManager
 				// else
 				if (record.getImportsClosure().contains(changedOntology)) {
 					// TODO: optimize by applying changes directly
-					record.invalidate();
+					record.invalidateLater();
 					return;
 				}
 			}
