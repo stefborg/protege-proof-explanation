@@ -28,7 +28,8 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import org.liveontologies.owlapi.proof.OWLProofNode;
+import org.liveontologies.owlapi.proof.OWLProof;
+import org.liveontologies.owlapi.proof.ProofChangeListener;
 import org.liveontologies.owlapi.proof.util.LeafProofNode;
 import org.liveontologies.owlapi.proof.util.ProofNode;
 import org.liveontologies.owlapi.proof.util.ProofNodes;
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * @author Yevgeny Kazakov
  */
 public class ProofManager implements ImportsClosureRecord.ChangeListener,
-		OWLProofNode.ChangeListener, Disposable {
+		ProofChangeListener, Disposable {
 
 	// logger for this class
 	private static final Logger LOGGER_ = LoggerFactory
@@ -68,20 +69,21 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	private final ImportsClosureRecord importsClosureRec_;
 
 	/**
-	 * the proof node for {@link #entailment_} returned by the proof service;
-	 * all inferences can be accessed from that
+	 * the proof for {@link #entailment_} returned by the proof service; all
+	 * inferences can be accessed from this object
 	 */
-	private OWLProofNode proofRoot_ = null;
+	private OWLProof proof_ = null;
 
 	/**
 	 * the result of applying the transformation (e.g., elimination of cycles)
-	 * to {@link #proofRoot_}; its inferences will be actually displayed
+	 * to the root node of {@link #proof_}; its inferences will be actually
+	 * displayed
 	 */
 	private ProofNode<OWLAxiom> processedProofRoot_ = null;
 
 	/**
-	 * {@code true} if {@link #processedProofRoot_} reflects the one maintained by
-	 * {@link #proofService_}
+	 * {@code true} if {@link #processedProofRoot_} reflects the one maintained
+	 * by {@link #proofService_}
 	 */
 	private boolean proofRootUpToDate_ = false;
 
@@ -133,11 +135,12 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * @see #getEntailment()
 	 */
 	public synchronized void setProofService(ProofService proofService) {
-		if (proofRoot_ != null) {
-			proofRoot_.removeListener(this);
+		if (proof_ != null) {
+			proof_.removeListener(this);
+			proof_.dispose();
 		}
-		proofRoot_ = proofService.getProof(entailment_);
-		proofRoot_.addListener(this);
+		proof_ = proofService.getProof(entailment_);
+		proof_.addListener(this);
 		invalidateProofRoot();
 	}
 
@@ -150,11 +153,11 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 */
 	public synchronized ProofNode<OWLAxiom> getProofRoot() {
 		if (!proofRootUpToDate_) {
-			if (proofRoot_ == null) {
+			if (proof_ == null) {
 				processedProofRoot_ = new LeafProofNode<OWLAxiom>(entailment_);
 			} else {
 				processedProofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(
-						proofRoot_,
+						proof_.getRoot(),
 						importsClosureRec_.getStatedAxiomsWithoutAnnotations());
 			}
 			proofRootUpToDate_ = true;
@@ -211,8 +214,9 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	@Override
 	public void dispose() {
 		importsClosureRec_.removeListener(this);
-		if (proofRoot_ != null) {
-			proofRoot_.removeListener(this);
+		if (proof_ != null) {
+			proof_.removeListener(this);
+			proof_.dispose();
 		}
 	}
 
@@ -222,7 +226,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	}
 
 	@Override
-	public void nodeChanged() {
+	public void proofChanged() {
 		invalidateProofRootLater();
 	}
 

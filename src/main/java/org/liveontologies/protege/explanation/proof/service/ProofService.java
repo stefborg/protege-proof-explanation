@@ -1,6 +1,6 @@
 package org.liveontologies.protege.explanation.proof.service;
 
-import org.liveontologies.owlapi.proof.OWLProofNode;
+import org.liveontologies.owlapi.proof.OWLProof;
 
 /*
  * #%L
@@ -79,7 +79,7 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 * @throws UnsupportedEntailmentTypeException
 	 *             if checking entailment of the given axiom is not supported
 	 */
-	public abstract OWLProofNode getProof(OWLAxiom entailment)
+	public abstract OWLProof getProof(OWLAxiom entailment)
 			throws UnsupportedEntailmentTypeException;
 
 	@Override
