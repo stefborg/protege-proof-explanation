@@ -126,7 +126,7 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 		if (premises.isEmpty()) {
 			sb.append("is a tautology");
 		} else {
-			sb.append("is derived from:");
+			sb.append("is inferred from:");
 		}
 		sb.append("<ol>");
 		for (int i = 0; i < premises.size(); i++) {
