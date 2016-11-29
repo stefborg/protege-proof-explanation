@@ -293,6 +293,7 @@ is displaying, navigating, and updating those proofs in the user interface.
 						<configuration>
 							<name>currentYear</name>
 							<pattern>yyyy</pattern>
+							<locale>en,US</locale>
 						</configuration>
 					</execution>
 					<execution>
@@ -305,6 +306,7 @@ is displaying, navigating, and updating those proofs in the user interface.
 						<configuration>
 							<name>buildDate</name>
 							<pattern>yyyy-MM-dd</pattern>
+							<locale>en,US</locale>
 						</configuration>
 					</execution>
 				</executions>
