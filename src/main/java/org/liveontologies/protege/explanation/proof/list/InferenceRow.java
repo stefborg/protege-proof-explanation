@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.liveontologies.owlapi.proof.util.Inference;
-import org.liveontologies.owlapi.proof.util.ProofNode;
+import org.liveontologies.proof.util.Inference;
+import org.liveontologies.proof.util.ProofNode;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.frame.OWLFrameSection;
 import org.semanticweb.owlapi.model.OWLAxiom;

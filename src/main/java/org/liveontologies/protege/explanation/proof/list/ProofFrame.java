@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.liveontologies.owlapi.proof.util.ProofNode;
+import org.liveontologies.proof.util.ProofNode;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
 import org.liveontologies.protege.explanation.proof.ProofManager;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomChecker;

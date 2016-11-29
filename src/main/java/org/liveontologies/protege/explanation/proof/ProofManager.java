@@ -30,9 +30,9 @@ import javax.swing.SwingUtilities;
 
 import org.liveontologies.owlapi.proof.OWLProof;
 import org.liveontologies.owlapi.proof.ProofChangeListener;
-import org.liveontologies.owlapi.proof.util.LeafProofNode;
-import org.liveontologies.owlapi.proof.util.ProofNode;
-import org.liveontologies.owlapi.proof.util.ProofNodes;
+import org.liveontologies.proof.util.LeafProofNode;
+import org.liveontologies.proof.util.ProofNode;
+import org.liveontologies.proof.util.ProofNodes;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.Disposable;
 import org.protege.editor.owl.OWLEditorKit;
