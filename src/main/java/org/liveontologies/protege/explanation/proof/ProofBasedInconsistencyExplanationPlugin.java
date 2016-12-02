@@ -57,6 +57,7 @@ public class ProofBasedInconsistencyExplanationPlugin
 	public void initialise() throws Exception {
 		proofServiceMan_ = ProofServiceManager.get(kit_);
 		importsClosureMan_ = ImportsClosureManager.get(kit_);
+		KeyEventManager.initialise(kit_);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ package org.liveontologies.protege.explanation.proof;
  */
 
 import org.liveontologies.protege.explanation.proof.service.ProofService;
+import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.explanation.ExplanationResult;
 import org.protege.editor.owl.ui.explanation.ExplanationService;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -42,8 +43,10 @@ public class ProofBasedExplanationService extends ExplanationService {
 
 	@Override
 	public void initialise() throws Exception {
-		proofServiceMan_ = ProofServiceManager.get(getOWLEditorKit());
-		importsClosureMan_ = ImportsClosureManager.get(getOWLEditorKit());
+		OWLEditorKit kit = getOWLEditorKit();
+		proofServiceMan_ = ProofServiceManager.get(kit);
+		importsClosureMan_ = ImportsClosureManager.get(kit);
+		KeyEventManager.initialise(kit);
 	}
 
 	@Override
