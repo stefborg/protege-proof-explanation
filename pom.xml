@@ -88,7 +88,7 @@ is displaying, navigating, and updating those proofs in the user interface.
 			${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
 		</release.version>
 		<!-- the path to update.properties and version-info.txt for Protege auto-update -->
-		<update.url>${project.scm.url}/tree/release</update.url>
+		<update.url>https://raw.githubusercontent.com/liveontologies/protege-proof-explanation/release</update.url>
 	</properties>
 
 	<repositories>
