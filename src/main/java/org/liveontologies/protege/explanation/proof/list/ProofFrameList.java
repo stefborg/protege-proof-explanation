@@ -61,11 +61,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
 
+import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.protege.editor.core.ProtegeProperties;
 import org.protege.editor.core.ui.list.MListItem;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.frame.OWLFrameListener;
-import org.protege.editor.owl.ui.frame.OWLFrameSectionRow;
 import org.protege.editor.owl.ui.framelist.OWLFrameList;
 import org.protege.editor.owl.ui.framelist.OWLFrameListInferredSectionRowBorder;
 import org.protege.editor.owl.ui.tree.OWLObjectTree;
@@ -100,11 +100,6 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 	 * expansion / collapse is triggered
 	 */
 	public static final int LONG_PRESS_THRESHOLD = 500; // ms
-
-	/**
-	 * The maximal number of rows expanded / collapsed recursively
-	 */
-	public static final int RECURSIVE_EXPANSION_LIMIT = 1000; // rows
 
 	/**
 	 * Action keys
@@ -164,9 +159,17 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 	 * The instance used to paint the navigation buttons
 	 */
 	private final NavButton navButton_ = new NavButton(this);
+	
+	/**
+	 * The maximal number of rows expanded / collapsed recursively
+	 */
+	private final int recursiveExpansionLimit_; // rows
 
 	public ProofFrameList(OWLEditorKit editorKit, ProofFrame proofFrame) {
 		super(editorKit, proofFrame);
+		ProofBasedExplanationPreferences prefs = new ProofBasedExplanationPreferences()
+				.load();
+		recursiveExpansionLimit_ = prefs.recursiveExpansionLimit;
 		setModel(new ProofFrameListModel(proofFrame));
 		setUI(new ProofFrameListUI());
 		setCellRenderer(new ProofFrameListRenderer(editorKit));
@@ -423,7 +426,7 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		// else
 		return super.getRowName(rowObject);
 	}
-	
+
 	@Override
 	protected Color getItemBackgroundColor(MListItem item) {
 		if (item instanceof ConclusionSection) {
@@ -783,7 +786,7 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				invalidate();
 				fireIntervalRemoved(this, intervalBegin, intervalEnd);
 			} else {
-				row.expandRecursively(RECURSIVE_EXPANSION_LIMIT);
+				row.expandRecursively(recursiveExpansionLimit_);
 				invalidate();
 				int intervalEnd = getLowestExpandedDescendant(row).getIndex();
 				fireIntervalAdded(this, intervalBegin, intervalEnd);

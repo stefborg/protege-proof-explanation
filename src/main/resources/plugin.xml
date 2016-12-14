@@ -15,5 +15,11 @@
         <name value="Proof Based Inconsistent Ontology Explanation"/>
         <class value="${pluginId}.ProofBasedInconsistencyExplanationPlugin"/>        
     </extension>
+    
+   <extension id="ProofBasedExplanationPreferences"
+               point="org.protege.editor.core.application.preferencespanel">
+       <label value="Proofs"/>
+       <class value="${pluginId}.ProofBasedExplanationPreferencesPanel"/>
+   </extension> 
 
 </plugin>
