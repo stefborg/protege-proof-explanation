@@ -28,11 +28,29 @@ import org.protege.editor.core.prefs.PreferencesManager;
 public class ProofBasedExplanationPreferences {
 
 	private static final String PREFS_KEY_ = "PROOF_BASED_EXPLANATION_PREFS",
-			RECURSIVE_EXPANSION_LIMIT_KEY_ = "RECURSIVE_EXPANSION_LIMIT";
+			RECURSIVE_EXPANSION_LIMIT_KEY_ = "RECURSIVE_EXPANSION_LIMIT",
+			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY = "DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT";
 
-	public int recursiveExpansionLimit; // inferences
+	public final static String RECURSIVE_EXPANSION_LIMIT_DESCRIPTION = "The maximal number of inferences expanded upon long press or alt + click",
+			DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION = "The maximal number of displayed inferences per conclusion (can be incrementated in steps)";
 
-	private final int defaultRecursiveExpansionLimit = 300; // inferences
+	private final static int DEFAULT_RECURSIVE_EXPANSION_LIMIT_ = 300; // inferences
+
+	private final static int DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_ = 5;
+
+	/**
+	 * {@value #RECURSIVE_EXPANSION_LIMIT_DESCRIPTION}
+	 */
+	public int recursiveExpansionLimit = DEFAULT_RECURSIVE_EXPANSION_LIMIT_; // inferences
+
+	/**
+	 * {@value #DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION}
+	 */
+	public int displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
+
+	private ProofBasedExplanationPreferences() {
+
+	}
 
 	private static Preferences getPrefs() {
 		PreferencesManager prefMan = PreferencesManager.getInstance();
@@ -40,21 +58,34 @@ public class ProofBasedExplanationPreferences {
 				ProofBasedExplanationPreferences.class);
 	}
 
+	/**
+	 * @return the preferences initialized with default values
+	 */
+	public static ProofBasedExplanationPreferences create() {
+		return new ProofBasedExplanationPreferences();
+	}
+
 	public ProofBasedExplanationPreferences load() {
 		Preferences prefs = getPrefs();
 		recursiveExpansionLimit = prefs.getInt(RECURSIVE_EXPANSION_LIMIT_KEY_,
-				defaultRecursiveExpansionLimit);
+				DEFAULT_RECURSIVE_EXPANSION_LIMIT_);
+		displayedInferencesPerConclusionLimit = prefs.getInt(
+				DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY,
+				DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_);
 		return this;
 	}
 
 	public ProofBasedExplanationPreferences save() {
 		Preferences prefs = getPrefs();
 		prefs.putInt(RECURSIVE_EXPANSION_LIMIT_KEY_, recursiveExpansionLimit);
+		prefs.putInt(DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY,
+				displayedInferencesPerConclusionLimit);
 		return this;
 	}
 
 	public ProofBasedExplanationPreferences reset() {
-		recursiveExpansionLimit = defaultRecursiveExpansionLimit;
+		recursiveExpansionLimit = DEFAULT_RECURSIVE_EXPANSION_LIMIT_;
+		displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
 		return this;
 	}
 

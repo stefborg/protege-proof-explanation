@@ -184,6 +184,8 @@ public interface ProofFrameListRow extends Disposable {
 
 		O visit(ConclusionSection row);
 
+		O visit(MoreInferencesRow row);
+
 	}
 
 }

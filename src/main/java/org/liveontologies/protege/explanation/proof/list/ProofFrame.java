@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.liveontologies.proof.util.ProofNode;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
+import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.liveontologies.protege.explanation.proof.ProofManager;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomChecker;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomEditor;
@@ -77,6 +78,12 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 	private final List<OWLFrameListener> listeners_ = new ArrayList<OWLFrameListener>(
 			2);
 
+	/**
+	 * see
+	 * {@link ProofBasedExplanationPreferences#displayedInferencesPerConclusionLimit}
+	 */
+	private final int displayedInferencesPerConclusionLimit_; // rows
+
 	public ProofFrame(ProofManager man, final OWLEditorKit kit) {
 		this.man_ = man;
 		this.kit_ = kit;
@@ -89,6 +96,8 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 		};
 		this.checker_ = new OWLAxiomChecker(kit_.getModelManager());
 		this.editor_ = new OWLAxiomEditor(kit_, checker_);
+		this.displayedInferencesPerConclusionLimit_ = ProofBasedExplanationPreferences
+				.create().load().displayedInferencesPerConclusionLimit;
 		updateProof();
 	}
 
@@ -117,6 +126,10 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 			this.rootSection_ = new InferenceSection(this, root_);
 		}
 		return rootSection_;
+	}
+
+	int getDisplayedInferencesPerConclusionLimit() {
+		return displayedInferencesPerConclusionLimit_;
 	}
 
 	public void updateProof() {

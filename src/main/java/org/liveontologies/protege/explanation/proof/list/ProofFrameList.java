@@ -41,6 +41,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
@@ -63,6 +64,7 @@ import javax.swing.event.MouseInputListener;
 
 import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.protege.editor.core.ProtegeProperties;
+import org.protege.editor.core.ui.list.MListButton;
 import org.protege.editor.core.ui.list.MListItem;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.frame.OWLFrameListener;
@@ -159,17 +161,18 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 	 * The instance used to paint the navigation buttons
 	 */
 	private final NavButton navButton_ = new NavButton(this);
-	
+
+	private final MListButton moreInferencesButton_ = new MoreInferencesButton();
+
 	/**
-	 * The maximal number of rows expanded / collapsed recursively
+	 * see {@link ProofBasedExplanationPreferences#recursiveExpansionLimit}
 	 */
 	private final int recursiveExpansionLimit_; // rows
 
 	public ProofFrameList(OWLEditorKit editorKit, ProofFrame proofFrame) {
 		super(editorKit, proofFrame);
-		ProofBasedExplanationPreferences prefs = new ProofBasedExplanationPreferences()
-				.load();
-		recursiveExpansionLimit_ = prefs.recursiveExpansionLimit;
+		this.recursiveExpansionLimit_ = ProofBasedExplanationPreferences
+				.create().load().recursiveExpansionLimit;
 		setModel(new ProofFrameListModel(proofFrame));
 		setUI(new ProofFrameListUI());
 		setCellRenderer(new ProofFrameListRenderer(editorKit));
@@ -252,8 +255,7 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 	static int getRowIndent(ProofFrameListRow row) {
 		return row.accept(new ProofFrameListRow.Visitor<Integer>() {
 
-			@Override
-			public Integer visit(InferenceRow row) {
+			int getInferenceIndent(ProofFrameListRow row) {
 				return row.getRowDepth() * (LEFT_CHILD_INDENT
 						+ RIGHT_CHILD_INDENT + INFERENCE_INDENT) / 2
 						+ INFERENCE_INDENT;
@@ -264,6 +266,17 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				return (row.getRowDepth() + 1) * (LEFT_CHILD_INDENT
 						+ RIGHT_CHILD_INDENT + INFERENCE_INDENT) / 2;
 			}
+
+			@Override
+			public Integer visit(InferenceRow row) {
+				return getInferenceIndent(row);
+			}
+
+			@Override
+			public Integer visit(MoreInferencesRow row) {
+				return getInferenceIndent(row);
+			}
+
 		}) - INFERENCE_INDENT; // should be 0 for the first row
 	}
 
@@ -327,21 +340,37 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		// else
 		ProofFrameListRow row = getProofListModel().getElementAt(index);
 		if (row instanceof InferenceRow) {
-			return row.getTooltip();	
+			return row.getTooltip();
 		}
 		// else
 		return super.getToolTipText(event);
 	}
 
 	protected void handleEnterKey(ProofFrameListRow row) {
-		if (row instanceof ConclusionSection) {
-			ConclusionSection conclRow = (ConclusionSection) row;
-			if (conclRow.isEditable()) {
-				handleEdit();
-			} else {
-				toggleExpandState(conclRow);
+		row.accept(new ProofFrameListRow.Visitor<Void>() {
+
+			@Override
+			public Void visit(InferenceRow row) {
+				return null;
 			}
-		}
+
+			@Override
+			public Void visit(ConclusionSection row) {
+				if (row.isEditable()) {
+					handleEdit();
+				} else {
+					toggleExpandState(row);
+				}
+				return null;
+			}
+
+			@Override
+			public Void visit(MoreInferencesRow row) {
+				getProofListModel().loadMoreInferences(row.getParent());
+				return null;
+			}
+
+		});
 	}
 
 	protected void handleDoubleClick(ProofFrameListRow row) {
@@ -554,6 +583,12 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 					}
 					return null;
 				}
+
+				@Override
+				public Void visit(MoreInferencesRow row) {
+					// no lines
+					return null;
+				}
 			});
 		}
 	}
@@ -598,6 +633,26 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		}
 		// else
 		return null;
+	}
+
+	@Override
+	protected List<MListButton> getButtons(Object item) {
+		if (item instanceof MoreInferencesRow) {
+			final MoreInferencesRow row = (MoreInferencesRow) item;
+			int index = row.getIndex();
+			Rectangle rowBounds = getCellBound(index);
+			MListButton button = moreInferencesButton_;
+			button.setActionListener(e -> {
+				getProofListModel().loadMoreInferences(row.getParent());
+			});
+			int buttonDimension = getButtonDimension();
+			button.setLocation(getRowIndent(row),
+					rowBounds.y + (rowBounds.height / 2 - buttonDimension / 2));
+			button.setSize(buttonDimension);
+			return Collections.singletonList(button);
+		}
+		// else
+		return super.getButtons(item);
 	}
 
 	/**
@@ -667,7 +722,10 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				int index = sections_.size();
 				next.setIndex(index);
 				if (getIndex(next.getParent()) == newSelectedIndex
-						&& next.matches(nextSelectedCandidate)) {
+						&& (next.matches(nextSelectedCandidate)
+								|| (nextSelectedCandidate instanceof MoreInferencesRow
+										&& nextSelectedCandidate
+												.getIndex() == index))) {
 					newSelectedIndex = index;
 					nextSelectedCandidate = previousSelectionPath_.poll();
 				}
@@ -678,6 +736,12 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				// else if expanded
 				List<? extends ProofFrameListRow> children = next.getChildren();
 				// push children preserving the order
+				if (next instanceof ConclusionSection) {
+					ConclusionSection row = (ConclusionSection) next;
+					if (row.hasMoreChildren()) {
+						todo.push(new MoreInferencesRow(row));
+					}
+				}
 				for (int i = children.size() - 1; i >= 0; i--) {
 					todo.push(children.get(i));
 				}
@@ -728,6 +792,11 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 					if (conclusion != null) {
 						toggleHighlight(conclusion);
 					}
+					return null;
+				}
+
+				@Override
+				public Void visit(MoreInferencesRow row) {
 					return null;
 				}
 			});
@@ -787,6 +856,14 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 				int intervalEnd = getLowestExpandedDescendant(row).getIndex();
 				fireIntervalAdded(this, intervalBegin, intervalEnd);
 			}
+		}
+
+		private void loadMoreInferences(ConclusionSection row) {
+			int intervalBegin = getLowestExpandedDescendant(row).getIndex();
+			row.loadMoreChildren();
+			invalidate();
+			int intervalEnd = getLowestExpandedDescendant(row).getIndex();
+			fireIntervalAdded(this, intervalBegin, intervalEnd);
 		}
 
 		/**

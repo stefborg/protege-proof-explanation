@@ -91,6 +91,12 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 	private boolean expanded_ = false;
 
 	/**
+	 * the maximal number of inferences displayed for this conclusion if
+	 * expanded
+	 */
+	private int visibleChildLimit_;
+
+	/**
 	 * original (annotated) axioms corresponding to this conclusion
 	 */
 	private final List<? extends OWLAxiom> originalAxioms_;
@@ -115,6 +121,8 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 		if (!inferred_) {
 			expanded_ = true;
 		}
+		this.visibleChildLimit_ = parentSection.getFrame()
+				.getDisplayedInferencesPerConclusionLimit();
 	}
 
 	public ProofNode<OWLAxiom> getConclusion() {
@@ -155,6 +163,29 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 
 	OWLAxiomChecker getAxiomChecker() {
 		return parentSection_.getFrame().getAxiomChecker();
+	}
+
+	/**
+	 * @return {@code true} if this section has children that are not yet
+	 *         displayed
+	 */
+	boolean hasMoreChildren() {
+		return super.getChildren().size() > visibleChildLimit_;
+	}
+
+	void loadMoreChildren() {
+		visibleChildLimit_ += parentSection_.getFrame()
+				.getDisplayedInferencesPerConclusionLimit();
+	}
+
+	@Override
+	public synchronized List<InferenceRow> getChildren() {
+		List<InferenceRow> allChildren = super.getChildren();
+		if (visibleChildLimit_ >= allChildren.size()) {
+			return allChildren;
+		}
+		// else
+		return super.getChildren().subList(0, visibleChildLimit_);
 	}
 
 	@Override
@@ -322,6 +353,12 @@ class ConclusionSection extends AbstractProofFrameListRow<InferenceRow>
 		// try to keep the order of inferences fixed
 		Collections.sort(result);
 		return result;
+	}
+
+	@Override
+	void copySettingsFrom(AbstractProofFrameListRow<?> previous) {
+		visibleChildLimit_ = ((ConclusionSection) previous).visibleChildLimit_;
+		super.copySettingsFrom(previous);
 	}
 
 	@Override

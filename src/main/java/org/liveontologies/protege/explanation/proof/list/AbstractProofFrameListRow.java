@@ -187,7 +187,8 @@ public abstract class AbstractProofFrameListRow<C extends AbstractProofFrameList
 		if (previous.childSections_ == null) {
 			return;
 		}
-		for (AbstractProofFrameListRow<?> previousChild : previous.childSections_) {
+		for (AbstractProofFrameListRow<?> previousChild : previous
+				.getChildren()) {
 			// find the row which corresponds to the updated premise
 			int pos = 0;
 			int childCount = getChildren().size();

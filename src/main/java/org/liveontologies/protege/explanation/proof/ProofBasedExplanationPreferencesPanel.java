@@ -22,36 +22,33 @@ package org.liveontologies.protege.explanation.proof;
  * #L%
  */
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 
-import javax.swing.AbstractAction;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.protege.editor.core.ui.preferences.PreferencesLayoutPanel;
 import org.protege.editor.core.ui.preferences.PreferencesPanel;
 
 public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 
 	private static final long serialVersionUID = 8585913940466665136L;
 
-	private SpinnerNumberModel recursiveExpansionLimitModel_;
+	private SpinnerNumberModel recursiveExpansionLimitModel_,
+			displayedInferencesPerConclusionLimitModel_;
 
 	@Override
 	public void initialise() throws Exception {
-		ProofBasedExplanationPreferences prefs = new ProofBasedExplanationPreferences()
-				.load();
-		add(buildRecursiveExpansionLimitComponent(
-				prefs.recursiveExpansionLimit));
-		add(Box.createVerticalGlue());
-		add(buildResetComponent());
+		setLayout(new BorderLayout());
+		PreferencesLayoutPanel panel = new PreferencesLayoutPanel();
+		add(panel, BorderLayout.NORTH);
+		addRecursiveExpansionLimitSettings(panel);
+		addDisplayedInferencesPerConclusionLimitSettings(panel);
+		panel.addGroup("");
+		panel.addGroupComponent(buildResetComponent());
+		loadFrom(ProofBasedExplanationPreferences.create().load());
 	}
 
 	@Override
@@ -61,52 +58,60 @@ public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 
 	@Override
 	public void applyChanges() {
-		ProofBasedExplanationPreferences prefs = new ProofBasedExplanationPreferences()
-				.load();
-		prefs.recursiveExpansionLimit = recursiveExpansionLimitModel_
-				.getNumber().intValue();
+		ProofBasedExplanationPreferences prefs = ProofBasedExplanationPreferences
+				.create();
+		saveTo(prefs);
 		prefs.save();
 	}
 
-	private Component buildRecursiveExpansionLimitComponent(
-			int recursiveExpansionLimit) {
-		JPanel workersPane = new JPanel();
-		workersPane.setLayout(new BoxLayout(workersPane, BoxLayout.LINE_AXIS));
-		JLabel label = new JLabel("Recursive expansion limit:");
-		recursiveExpansionLimitModel_ = new SpinnerNumberModel(
-				recursiveExpansionLimit, 1, 99999, 1);
-		JComponent spinner = new JSpinner(recursiveExpansionLimitModel_);
-		spinner.setMaximumSize(spinner.getPreferredSize());
-		workersPane.add(label);
-		workersPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		workersPane.add(spinner);
-		label.setLabelFor(spinner);
-		String tooltip = "The maximal number of inferences expanded upon long press or alt + click";
-		workersPane.setToolTipText(tooltip);
-		spinner.setToolTipText(tooltip);
-		workersPane.setAlignmentX(LEFT_ALIGNMENT);
-		return workersPane;
+	private void loadFrom(ProofBasedExplanationPreferences prefs) {
+		recursiveExpansionLimitModel_.setValue(prefs.recursiveExpansionLimit);
+		displayedInferencesPerConclusionLimitModel_
+				.setValue(prefs.displayedInferencesPerConclusionLimit);
 	}
 
-	private Component buildResetComponent() {
-		JButton resetButton = new JButton(new AbstractAction() {
-			private static final long serialVersionUID = 6257131701636338334L;
+	private void saveTo(ProofBasedExplanationPreferences prefs) {
+		prefs.recursiveExpansionLimit = recursiveExpansionLimitModel_
+				.getNumber().intValue();
+		prefs.displayedInferencesPerConclusionLimit = displayedInferencesPerConclusionLimitModel_
+				.getNumber().intValue();
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				reset();
-			}
-		});
-		resetButton.setText("Reset");
+	private void addRecursiveExpansionLimitSettings(
+			PreferencesLayoutPanel panel) {
+		panel.addGroup("Recursive expansion limit");
+		recursiveExpansionLimitModel_ = new SpinnerNumberModel(1, 1, 9999, 1);
+		JComponent spinner = new JSpinner(recursiveExpansionLimitModel_);
+		spinner.setMaximumSize(spinner.getPreferredSize());
+		panel.addGroupComponent(spinner);
+		String tooltip = ProofBasedExplanationPreferences.RECURSIVE_EXPANSION_LIMIT_DESCRIPTION;
+		spinner.setToolTipText(tooltip);
+	}
+
+	private void addDisplayedInferencesPerConclusionLimitSettings(
+			PreferencesLayoutPanel panel) {
+		panel.addGroup("Displayed inferences per conclusion limit");
+		displayedInferencesPerConclusionLimitModel_ = new SpinnerNumberModel(1,
+				1, 9999, 1);
+		JComponent spinner = new JSpinner(
+				displayedInferencesPerConclusionLimitModel_);
+		displayedInferencesPerConclusionLimitModel_.setMaximum(999);
+		spinner.setMaximumSize(spinner.getPreferredSize());
+		panel.addGroupComponent(spinner);
+		String tooltip = ProofBasedExplanationPreferences.DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION;
+		spinner.setToolTipText(tooltip);
+	}
+
+	private JComponent buildResetComponent() {
+		JButton resetButton = new JButton("Reset");
+		resetButton.addActionListener(e -> reset());
 		resetButton.setToolTipText("Resets all settings to default values");
 
 		return resetButton;
 	}
 
 	private void reset() {
-		ProofBasedExplanationPreferences prefs = new ProofBasedExplanationPreferences()
-				.reset();
-		recursiveExpansionLimitModel_.setValue(prefs.recursiveExpansionLimit);
+		loadFrom(ProofBasedExplanationPreferences.create());
 	}
 
 }

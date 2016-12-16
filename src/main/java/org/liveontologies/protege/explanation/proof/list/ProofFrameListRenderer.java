@@ -107,6 +107,19 @@ public class ProofFrameListRenderer
 
 				return label;
 			}
+
+			@Override
+			public Component visit(MoreInferencesRow row) {
+				JLabel label = (JLabel) separatorRenderer
+						.getListCellRendererComponent(list, " ",
+								index, isSelected, cellHasFocus);
+				int padding = ProofFrameList.getRowIndent(row);
+				Border externalBorder = BorderFactory.createMatteBorder(0,
+						padding, 0, 0, list.getBackground());
+				label.setBorder(externalBorder);
+
+				return label;
+			}
 		});
 
 	}
