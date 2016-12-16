@@ -178,7 +178,6 @@ public abstract class AbstractProofFrameListRow<C extends AbstractProofFrameList
 	 * @param previous
 	 */
 	void copySettingsFrom(AbstractProofFrameListRow<?> previous) {
-		// else
 		if (isExpanded() != previous.isExpanded()) {
 			toggleExpandState();
 		}

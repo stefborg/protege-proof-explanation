@@ -721,7 +721,6 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 
 				@Override
 				public Void visit(ConclusionSection row) {
-					toggleHighlightChildren(row);
 					return null;
 				}
 
