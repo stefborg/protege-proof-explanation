@@ -574,20 +574,17 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		} else {
 			navButton_.setIcon(TREE_COLLAPSED, x, y);
 		}
-		navButton_.setActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switch (e.getActionCommand()) {
-				case NAV_CLICK:
-					toggleExpandState(row);
-					break;
-				case NAV_ALT_CLICK:
-					toggleExpandRecursive(row);
-					break;
-				case NAV_LONG_PRESS:
-					toggleExpandRecursive(row);
-					break;
-				}
+		navButton_.setActionListener(e -> {
+			switch (e.getActionCommand()) {
+			case NAV_CLICK:
+				toggleExpandState(row);
+				break;
+			case NAV_ALT_CLICK:
+				toggleExpandRecursive(row);
+				break;
+			case NAV_LONG_PRESS:
+				toggleExpandRecursive(row);
+				break;
 			}
 		});
 		return navButton_;
