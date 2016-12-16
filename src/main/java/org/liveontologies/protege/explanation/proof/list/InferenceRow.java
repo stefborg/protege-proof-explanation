@@ -117,7 +117,7 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 		sb.append("</style>");
 		sb.append("</head>");
 		sb.append("<body>");
-		sb.append("<p>");		
+		sb.append("<p>");
 		sb.append(man.getRendering(example.getConclusion()));
 		sb.append("</p>");
 		sb.append("<br>");
@@ -147,7 +147,8 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 	@Override
 	public int hashCode() {
 		if (hash_ == 0) {
-			hash_ += section_.getName().hashCode();
+			hash_ = InferenceRow.class.hashCode()
+					+ section_.getName().hashCode();
 			for (ProofNode<OWLAxiom> premise : section_.getInference()
 					.getPremises()) {
 				hash_ += premise.getMember().hashCode();
@@ -163,7 +164,16 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 
 	@Override
 	public int compareTo(InferenceRow other) {
-		return hashCode() - other.hashCode();
+		int hash = hashCode();
+		int otherHash = other.hashCode();
+		if (hash == otherHash) {
+			if (equals(other)) {
+				return 0;
+			}
+			// hash collision, compare strings
+			return toString().compareTo(other.toString());
+		} else
+			return hash < otherHash ? -1 : 1;
 	}
 
 	@Override
