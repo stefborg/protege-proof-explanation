@@ -1,6 +1,7 @@
 package org.liveontologies.protege.explanation.proof.service;
 
-import org.liveontologies.owlapi.proof.OWLProof;
+import org.liveontologies.proof.util.DynamicInferenceSet;
+import org.liveontologies.proof.util.InferenceExampleProvider;
 
 /*
  * #%L
@@ -75,13 +76,16 @@ public abstract class ProofService implements ProtegePluginInstance {
 
 	/**
 	 * @param entailment
-	 * @return the root node of the proof for the given entailment
+	 * @return the inferences using which the entailment can be derived from the
+	 *         axioms in the ontology
 	 * @throws UnsupportedEntailmentTypeException
 	 *             if checking entailment of the given axiom is not supported
 	 */
-	public abstract OWLProof getProof(OWLAxiom entailment)
+	public abstract DynamicInferenceSet<OWLAxiom> getProof(OWLAxiom entailment)
 			throws UnsupportedEntailmentTypeException;
 
+	public abstract InferenceExampleProvider<OWLAxiom> getExampleProvider();
+	
 	@Override
 	public abstract void dispose();
 

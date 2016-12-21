@@ -1,5 +1,7 @@
 package org.liveontologies.protege.explanation.proof.list;
 
+import java.util.AbstractList;
+
 /*-
  * #%L
  * Protege Proof-Based Explanation
@@ -27,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.liveontologies.proof.util.Inference;
+import org.liveontologies.proof.util.Inferences;
 import org.liveontologies.proof.util.ProofNode;
 import org.liveontologies.proof.util.ProofStep;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
@@ -83,8 +86,21 @@ public class ProofRoot implements ProofStep<OWLAxiom>, ProofNode<OWLAxiom> {
 	}
 
 	@Override
-	public Inference<OWLAxiom> getExample() {
-		return null;
+	public Inference<OWLAxiom> getInference() {
+		return Inferences.create(getName(), member_,
+				new AbstractList<OWLAxiom>() {
+
+					@Override
+					public OWLAxiom get(int index) {
+						return premises_.get(index).getMember();
+					}
+
+					@Override
+					public int size() {
+						return premises_.size();
+					}
+
+				});
 	}
 
 }
