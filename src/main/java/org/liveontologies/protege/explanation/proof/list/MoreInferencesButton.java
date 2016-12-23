@@ -30,7 +30,7 @@ import org.protege.editor.core.ui.list.MListButton;
 
 public class MoreInferencesButton extends MListButton {
 
-	public static String NAME = "Show more inferences";
+	public static String NAME = "Display more inferences";
 
 	public MoreInferencesButton() {
 		super(NAME, Color.GREEN.darker());
