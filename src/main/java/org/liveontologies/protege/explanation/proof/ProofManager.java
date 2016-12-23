@@ -29,7 +29,6 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 
 import org.liveontologies.proof.util.DynamicInferenceSet;
-import org.liveontologies.proof.util.InferenceExampleProvider;
 import org.liveontologies.proof.util.LeafProofNode;
 import org.liveontologies.proof.util.ProofNode;
 import org.liveontologies.proof.util.ProofNodes;
@@ -77,7 +76,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * an object using which examples of inferences can be obtained; those are
 	 * used in tooltips for inference rows
 	 */
-	private InferenceExampleProvider<OWLAxiom> exampleProvider_ = null;
+	private ProofService proofService_ = null;
 
 	/**
 	 * the result of applying the transformation (e.g., elimination of cycles)
@@ -131,8 +130,8 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 		return proofServiceMan_.getOWLEditorKit();
 	}
 
-	public InferenceExampleProvider<OWLAxiom> getExampleProvider() {
-		return exampleProvider_;
+	public ProofService getProofService() {
+		return proofService_;
 	}
 
 	/**
@@ -143,13 +142,13 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * @see #getEntailment()
 	 */
 	public synchronized void setProofService(ProofService proofService) {
+		proofService_ = proofService;
 		if (proof_ != null) {
 			proof_.removeListener(this);
 			proof_.dispose();
 		}
 		proof_ = proofService.getProof(entailment_);
 		proof_.addListener(this);
-		exampleProvider_ = proofService.getExampleProvider();
 		invalidateProofRoot();
 	}
 
@@ -165,9 +164,18 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			if (proof_ == null) {
 				proofRoot_ = new LeafProofNode<OWLAxiom>(entailment_);
 			} else {
-				proofRoot_ = ProofNodes.eliminateNotDerivableAndCycles(
-						ProofNodes.create(proof_, entailment_),
+				proofRoot_ = ProofNodes.create(proof_, entailment_);
+				proofRoot_ = ProofNodes.addAssertedInferences(proofRoot_,
 						importsClosureRec_.getStatedAxiomsWithoutAnnotations());
+				proofRoot_ = ProofNodes
+						.eliminateNotDerivableAndCycles(proofRoot_);
+				if (proofService_ != null && proofRoot_ != null) {
+					proofRoot_ = proofService_.postProcess(proofRoot_);
+				}
+				if (proofRoot_ != null) {
+					proofRoot_ = ProofNodes
+							.removeAssertedInferences(proofRoot_);
+				}
 			}
 			proofRootUpToDate_ = true;
 		}

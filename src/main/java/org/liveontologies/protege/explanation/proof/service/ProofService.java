@@ -1,7 +1,10 @@
 package org.liveontologies.protege.explanation.proof.service;
 
+import org.liveontologies.proof.util.AssertedConclusionInference;
 import org.liveontologies.proof.util.DynamicInferenceSet;
-import org.liveontologies.proof.util.InferenceExampleProvider;
+import org.liveontologies.proof.util.Inference;
+import org.liveontologies.proof.util.ProofNode;
+import org.liveontologies.proof.util.ProofStep;
 
 /*
  * #%L
@@ -69,23 +72,66 @@ public abstract class ProofService implements ProtegePluginInstance {
 	/**
 	 * @param entailment
 	 * @return {@code true} if this service can provide a proof for the given
-	 *         entailment; the subsequent call of {@link #getProof(OWLAxiom)}
-	 *         should return such a proof
+	 *         entailed {@link OWLAxiom}; the subsequent call of
+	 *         {@link #getProof(OWLAxiom)} should return such a proof
 	 */
 	public abstract boolean hasProof(OWLAxiom entailment);
 
 	/**
+	 * Returns a proof for the given {@link OWLAxiom} as sets of inferences over
+	 * {@link OWLAxiom}s. Using these inferences it should be possible to derive
+	 * the given {@link OWLAxiom} from the axoioms in the ontology, if it is
+	 * entailed. If the axiom cannot be derived, the result may be any inference
+	 * set, e.g., the empty one.
+	 * 
 	 * @param entailment
-	 * @return the inferences using which the entailment can be derived from the
-	 *         axioms in the ontology
+	 *            the {@link OWLAxiom} for which the proof should be generated
+	 * @return the {@link DynamicInferenceSet} representing the set of
+	 *         inferences using which the given {@link OWLAxiom} can be derived
+	 *         from the axioms in the ontology
 	 * @throws UnsupportedEntailmentTypeException
-	 *             if checking entailment of the given axiom is not supported
+	 *             if checking entailment of the given given {@link OWLAxiom} is
+	 *             not supported
 	 */
 	public abstract DynamicInferenceSet<OWLAxiom> getProof(OWLAxiom entailment)
 			throws UnsupportedEntailmentTypeException;
 
-	public abstract InferenceExampleProvider<OWLAxiom> getExampleProvider();
-	
+	/**
+	 * This method provides examples that explain inferences used in the proof
+	 * 
+	 * @param inference
+	 * 
+	 * @return an example of the given inference, which can be used for
+	 *         explanation purpose. Usually it is an inference instantiated with
+	 *         some generic parameters. If {@code null}, no example is provided.
+	 */
+	abstract public Inference<OWLAxiom> getExample(
+			Inference<OWLAxiom> inference);
+
+	/**
+	 * Using this method the displayed proof can be additionally post-processed
+	 * before being displayed to the user
+	 * 
+	 * @param node
+	 *            the {@link ProofNode} representing the acyclic proof tree
+	 *            obtained from the inference set returned by
+	 *            {@link #getProof(OWLAxiom)}; the proof steps in this proof can
+	 *            use only inferences from this inference set or the
+	 *            {@link AssertedConclusionInference} for inferences from the
+	 *            axioms in the ontology. A {@link ProofNode} is acyclic if any
+	 *            path induced by the conclusion -> premise relation in the
+	 *            proof tree represented by this {@link ProofNode} does not
+	 *            contain repetitions (i.e., equal {@link ProofNode}s).
+	 * 
+	 * @return the rewritten acyclic {@link ProofNode} that should be used to
+	 *         display the proof
+	 * 
+	 * @see ProofStep#getInference()
+	 */
+	public ProofNode<OWLAxiom> postProcess(ProofNode<OWLAxiom> node) {
+		return node;
+	}
+
 	@Override
 	public abstract void dispose();
 

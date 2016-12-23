@@ -28,8 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.liveontologies.proof.util.Inference;
-import org.liveontologies.proof.util.InferenceExampleProvider;
 import org.liveontologies.proof.util.ProofNode;
+import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.frame.OWLFrameSection;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -103,12 +103,12 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 
 	@Override
 	public String getTooltip() {
-		InferenceExampleProvider<OWLAxiom> exampleProvider = section_.getFrame()
-				.getWorkbenchManager().getExampleProvider();
-		if (exampleProvider == null) {
+		ProofService proofService = section_.getFrame()
+				.getWorkbenchManager().getProofService();
+		if (proofService == null) {
 			return null;
 		}
-		Inference<OWLAxiom> example = exampleProvider
+		Inference<OWLAxiom> example = proofService
 				.getExample(section_.getInference().getInference());
 		if (example == null) {
 			return null;
