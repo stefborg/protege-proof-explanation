@@ -32,7 +32,7 @@ public class ProofBasedExplanationPreferences {
 			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY = "DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT";
 
 	public final static String RECURSIVE_EXPANSION_LIMIT_DESCRIPTION = "The maximal number of inferences expanded upon long press or alt + click",
-			DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION = "The maximal number of displayed inferences per conclusion (can be incrementated in steps)";
+			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION = "The maximal number of inferences displayed at once for each conclusion";
 
 	private final static int DEFAULT_RECURSIVE_EXPANSION_LIMIT_ = 300; // inferences
 
@@ -44,7 +44,7 @@ public class ProofBasedExplanationPreferences {
 	public int recursiveExpansionLimit = DEFAULT_RECURSIVE_EXPANSION_LIMIT_; // inferences
 
 	/**
-	 * {@value #DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION}
+	 * {@value #DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION}
 	 */
 	public int displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
 

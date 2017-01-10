@@ -23,16 +23,22 @@ package org.liveontologies.protege.explanation.proof;
  */
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Collection;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.ui.preferences.PreferencesLayoutPanel;
-import org.protege.editor.core.ui.preferences.PreferencesPanel;
+import org.protege.editor.owl.ui.preferences.OWLPreferencesPanel;
 
-public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
+public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 
 	private static final long serialVersionUID = 8585913940466665136L;
 
@@ -44,6 +50,7 @@ public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 		setLayout(new BorderLayout());
 		PreferencesLayoutPanel panel = new PreferencesLayoutPanel();
 		add(panel, BorderLayout.NORTH);
+		addInstalledProofServicesComponent(panel);
 		addRecursiveExpansionLimitSettings(panel);
 		addDisplayedInferencesPerConclusionLimitSettings(panel);
 		panel.addGroup("");
@@ -77,6 +84,23 @@ public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 				.getNumber().intValue();
 	}
 
+	private void addInstalledProofServicesComponent(
+			PreferencesLayoutPanel panel) throws Exception {
+		panel.addGroup("Installed proof services");
+		DefaultListModel<ProofService> proofServicesModel = new DefaultListModel<>();
+		Collection<ProofService> proofServices = ProofServiceManager
+				.get(getOWLEditorKit()).getProofServices();
+		for (ProofService proofService : proofServices) {
+			proofServicesModel.addElement(proofService);
+		}
+		JList<ProofService> proofServicesList = new JList<>(proofServicesModel);
+		proofServicesList.setToolTipText(
+				"Plugins that provide proofs that are displayed for explanation of entailments");
+		JScrollPane pluginInfoScrollPane = new JScrollPane(proofServicesList);
+		pluginInfoScrollPane.setPreferredSize(new Dimension(300, 100));
+		panel.addGroupComponent(pluginInfoScrollPane);
+	}
+
 	private void addRecursiveExpansionLimitSettings(
 			PreferencesLayoutPanel panel) {
 		panel.addGroup("Recursive expansion limit");
@@ -90,7 +114,7 @@ public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 
 	private void addDisplayedInferencesPerConclusionLimitSettings(
 			PreferencesLayoutPanel panel) {
-		panel.addGroup("Displayed inferences per conclusion limit");
+		panel.addGroup("Displayed inferences per conclusion");
 		displayedInferencesPerConclusionLimitModel_ = new SpinnerNumberModel(1,
 				1, 9999, 1);
 		JComponent spinner = new JSpinner(
@@ -98,7 +122,7 @@ public class ProofBasedExplanationPreferencesPanel extends PreferencesPanel {
 		displayedInferencesPerConclusionLimitModel_.setMaximum(999);
 		spinner.setMaximumSize(spinner.getPreferredSize());
 		panel.addGroupComponent(spinner);
-		String tooltip = ProofBasedExplanationPreferences.DISPLAYED_INFERENCES_PER_CONCLUSION_DESCRIPTION;
+		String tooltip = ProofBasedExplanationPreferences.DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION;
 		spinner.setToolTipText(tooltip);
 	}
 
