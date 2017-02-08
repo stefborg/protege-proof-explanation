@@ -1,6 +1,7 @@
 target/
 META-INF/
 plugin.xml
+/build.properties
 .settings/
 .classpath
 .project
