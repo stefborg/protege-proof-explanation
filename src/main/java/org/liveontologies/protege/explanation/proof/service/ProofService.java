@@ -1,10 +1,10 @@
 package org.liveontologies.protege.explanation.proof.service;
 
-import org.liveontologies.proof.util.AssertedConclusionInference;
-import org.liveontologies.proof.util.DynamicInferenceSet;
-import org.liveontologies.proof.util.Inference;
-import org.liveontologies.proof.util.ProofNode;
-import org.liveontologies.proof.util.ProofStep;
+import org.liveontologies.puli.AssertedConclusionInference;
+import org.liveontologies.puli.DynamicInferenceSet;
+import org.liveontologies.puli.Inference;
+import org.liveontologies.puli.ProofNode;
+import org.liveontologies.puli.ProofStep;
 
 /*
  * #%L

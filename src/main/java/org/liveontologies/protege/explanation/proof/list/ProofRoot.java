@@ -28,11 +28,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.liveontologies.proof.util.Inference;
-import org.liveontologies.proof.util.Inferences;
-import org.liveontologies.proof.util.ProofNode;
-import org.liveontologies.proof.util.ProofStep;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
+import org.liveontologies.puli.Inference;
+import org.liveontologies.puli.Inferences;
+import org.liveontologies.puli.ProofNode;
+import org.liveontologies.puli.ProofStep;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
 public class ProofRoot implements ProofStep<OWLAxiom>, ProofNode<OWLAxiom> {

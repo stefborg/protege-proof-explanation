@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.liveontologies.proof.util.ProofNode;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
 import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.liveontologies.protege.explanation.proof.ProofManager;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomChecker;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomEditor;
+import org.liveontologies.puli.ProofNode;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.editor.OWLObjectEditor;
 import org.protege.editor.owl.ui.frame.OWLFrame;

@@ -28,11 +28,11 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import org.liveontologies.proof.util.DynamicInferenceSet;
-import org.liveontologies.proof.util.LeafProofNode;
-import org.liveontologies.proof.util.ProofNode;
-import org.liveontologies.proof.util.ProofNodes;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
+import org.liveontologies.puli.DynamicInferenceSet;
+import org.liveontologies.puli.LeafProofNode;
+import org.liveontologies.puli.ProofNode;
+import org.liveontologies.puli.ProofNodes;
 import org.protege.editor.core.Disposable;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;

@@ -29,11 +29,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.liveontologies.proof.util.ProofNode;
-import org.liveontologies.proof.util.ProofStep;
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
 import org.liveontologies.protege.explanation.proof.ProofManager;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomChecker;
+import org.liveontologies.puli.ProofNode;
+import org.liveontologies.puli.ProofStep;
 import org.protege.editor.core.Disposable;
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.ui.editor.OWLObjectEditor;
