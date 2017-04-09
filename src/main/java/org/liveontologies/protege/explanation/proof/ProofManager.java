@@ -25,11 +25,13 @@ package org.liveontologies.protege.explanation.proof;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.liveontologies.puli.DynamicInferenceSet;
+import org.liveontologies.puli.InferenceSets;
 import org.liveontologies.puli.LeafProofNode;
 import org.liveontologies.puli.ProofNode;
 import org.liveontologies.puli.ProofNodes;
@@ -164,9 +166,13 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			if (proof_ == null) {
 				proofRoot_ = new LeafProofNode<OWLAxiom>(entailment_);
 			} else {
-				proofRoot_ = ProofNodes.create(proof_, entailment_);
+				Set<OWLAxiom> stated = importsClosureRec_
+						.getStatedAxiomsWithoutAnnotations();
+				proofRoot_ = ProofNodes.create(
+						InferenceSets.prune(proof_, entailment_, stated),
+						entailment_);
 				proofRoot_ = ProofNodes.addAssertedInferences(proofRoot_,
-						importsClosureRec_.getStatedAxiomsWithoutAnnotations());
+						stated);
 				proofRoot_ = ProofNodes
 						.eliminateNotDerivableAndCycles(proofRoot_);
 				if (proofService_ != null && proofRoot_ != null) {
