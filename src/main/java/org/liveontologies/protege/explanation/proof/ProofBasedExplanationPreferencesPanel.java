@@ -28,6 +28,7 @@ import java.util.Collection;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -45,6 +46,8 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 	private SpinnerNumberModel recursiveExpansionLimitModel_,
 			displayedInferencesPerConclusionLimitModel_;
 
+	private JCheckBox removeUnnecessaryInferences_;
+
 	@Override
 	public void initialise() throws Exception {
 		setLayout(new BorderLayout());
@@ -53,6 +56,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		addInstalledProofServicesComponent(panel);
 		addRecursiveExpansionLimitSettings(panel);
 		addDisplayedInferencesPerConclusionLimitSettings(panel);
+		addRemoveUnnecessaryInferencesSettings(panel);
 		panel.addGroup("");
 		panel.addGroupComponent(buildResetComponent());
 		loadFrom(ProofBasedExplanationPreferences.create().load());
@@ -75,6 +79,8 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		recursiveExpansionLimitModel_.setValue(prefs.recursiveExpansionLimit);
 		displayedInferencesPerConclusionLimitModel_
 				.setValue(prefs.displayedInferencesPerConclusionLimit);
+		removeUnnecessaryInferences_
+				.setSelected(prefs.removeUnnecessaryInferences);
 	}
 
 	private void saveTo(ProofBasedExplanationPreferences prefs) {
@@ -82,6 +88,8 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 				.getNumber().intValue();
 		prefs.displayedInferencesPerConclusionLimit = displayedInferencesPerConclusionLimitModel_
 				.getNumber().intValue();
+		prefs.removeUnnecessaryInferences = removeUnnecessaryInferences_
+				.isSelected();
 	}
 
 	private void addInstalledProofServicesComponent(
@@ -124,6 +132,15 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		panel.addGroupComponent(spinner);
 		String tooltip = ProofBasedExplanationPreferences.DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION;
 		spinner.setToolTipText(tooltip);
+	}
+
+	private void addRemoveUnnecessaryInferencesSettings(
+			PreferencesLayoutPanel panel) {
+		removeUnnecessaryInferences_ = new JCheckBox(
+				"Remove unnecessary inferences");
+		panel.addGroupComponent(removeUnnecessaryInferences_);
+		removeUnnecessaryInferences_.setToolTipText(
+				ProofBasedExplanationPreferences.REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION);
 	}
 
 	private JComponent buildResetComponent() {

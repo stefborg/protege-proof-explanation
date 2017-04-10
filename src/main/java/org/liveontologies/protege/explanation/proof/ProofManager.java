@@ -168,8 +168,11 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			} else {
 				Set<OWLAxiom> stated = importsClosureRec_
 						.getStatedAxiomsWithoutAnnotations();
+				boolean removeUnnecessaryInferences = ProofBasedExplanationPreferences
+						.create().load().removeUnnecessaryInferences;
 				proofRoot_ = ProofNodes.create(
-						InferenceSets.prune(proof_, entailment_, stated),
+						removeUnnecessaryInferences ? InferenceSets
+								.prune(proof_, entailment_, stated) : proof_,
 						entailment_);
 				proofRoot_ = ProofNodes.addAssertedInferences(proofRoot_,
 						stated);

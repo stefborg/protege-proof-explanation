@@ -29,14 +29,19 @@ public class ProofBasedExplanationPreferences {
 
 	private static final String PREFS_KEY_ = "PROOF_BASED_EXPLANATION_PREFS",
 			RECURSIVE_EXPANSION_LIMIT_KEY_ = "RECURSIVE_EXPANSION_LIMIT",
-			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY = "DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT";
+			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY = "DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT",
+			REMOVE_UNNECESSARY_INFERENCES_KEY = "REMOVE_UNNECESSARY_INFERENCES";
 
 	public final static String RECURSIVE_EXPANSION_LIMIT_DESCRIPTION = "The maximal number of inferences expanded upon long press or alt + click",
-			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION = "The maximal number of inferences displayed at once for each conclusion";
+			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION = "The maximal number of inferences displayed at once for each conclusion",
+			REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION = "If checked, remove inferences unless it prevents"
+					+ " the entailment to be derived from any subset of axioms in the ontology";
 
 	private final static int DEFAULT_RECURSIVE_EXPANSION_LIMIT_ = 300; // inferences
 
 	private final static int DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_ = 5;
+
+	private final static boolean DEFAULT_REMOVE_UNNECESSARY_INFERENCES_ = true;
 
 	/**
 	 * {@value #RECURSIVE_EXPANSION_LIMIT_DESCRIPTION}
@@ -47,6 +52,11 @@ public class ProofBasedExplanationPreferences {
 	 * {@value #DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION}
 	 */
 	public int displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
+
+	/**
+	 * {@value #REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION}
+	 */
+	public boolean removeUnnecessaryInferences = DEFAULT_REMOVE_UNNECESSARY_INFERENCES_;
 
 	private ProofBasedExplanationPreferences() {
 
@@ -72,6 +82,9 @@ public class ProofBasedExplanationPreferences {
 		displayedInferencesPerConclusionLimit = prefs.getInt(
 				DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY,
 				DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_);
+		removeUnnecessaryInferences = prefs.getBoolean(
+				REMOVE_UNNECESSARY_INFERENCES_KEY,
+				DEFAULT_REMOVE_UNNECESSARY_INFERENCES_);
 		return this;
 	}
 
@@ -80,12 +93,15 @@ public class ProofBasedExplanationPreferences {
 		prefs.putInt(RECURSIVE_EXPANSION_LIMIT_KEY_, recursiveExpansionLimit);
 		prefs.putInt(DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY,
 				displayedInferencesPerConclusionLimit);
+		prefs.putBoolean(REMOVE_UNNECESSARY_INFERENCES_KEY,
+				removeUnnecessaryInferences);
 		return this;
 	}
 
 	public ProofBasedExplanationPreferences reset() {
 		recursiveExpansionLimit = DEFAULT_RECURSIVE_EXPANSION_LIMIT_;
 		displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
+		removeUnnecessaryInferences = DEFAULT_REMOVE_UNNECESSARY_INFERENCES_;
 		return this;
 	}
 
