@@ -80,6 +80,7 @@ is displaying, navigating, and updating those proofs in the user interface.
 		<protege.version>5.0.0</protege.version>
 		<pluginId>${project.groupId}.protege.explanation.proof</pluginId>
 		<extensionId>${pluginId}.service</extensionId>
+		<extensionPreferencesId>${pluginId}.preferences</extensionPreferencesId>
 		<plugin-zip.file>
 			${project.artifactId}-${project.version}
 		</plugin-zip.file>
@@ -220,7 +221,7 @@ is displaying, navigating, and updating those proofs in the user interface.
 					<instructions>
 						<Bundle-SymbolicName>${pluginId};singleton:=true</Bundle-SymbolicName>
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-						<Export-Package>${extensionId}</Export-Package>
+						<Export-Package>${extensionId},${extensionPreferencesId}</Export-Package>
 						<Update-Url>${update.url}/p5.update.properties</Update-Url>
 					</instructions>
 					<executions>

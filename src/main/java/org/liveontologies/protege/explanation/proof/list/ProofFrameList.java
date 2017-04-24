@@ -62,7 +62,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
 
-import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
+import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.protege.editor.core.ProtegeProperties;
 import org.protege.editor.core.ui.list.MListButton;
 import org.protege.editor.core.ui.list.MListItem;
@@ -165,13 +165,13 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 	private final MListButton moreInferencesButton_ = new MoreInferencesButton();
 
 	/**
-	 * see {@link ProofBasedExplanationPreferences#recursiveExpansionLimit}
+	 * see {@link ProofBasedExplPrefs#recursiveExpansionLimit}
 	 */
 	private final int recursiveExpansionLimit_; // rows
 
 	public ProofFrameList(OWLEditorKit editorKit, ProofFrame proofFrame) {
 		super(editorKit, proofFrame);
-		this.recursiveExpansionLimit_ = ProofBasedExplanationPreferences
+		this.recursiveExpansionLimit_ = ProofBasedExplPrefs
 				.create().load().recursiveExpansionLimit;
 		setModel(new ProofFrameListModel(proofFrame));
 		setUI(new ProofFrameListUI());

@@ -1,4 +1,4 @@
-package org.liveontologies.protege.explanation.proof;
+package org.liveontologies.protege.explanation.proof.preferences;
 
 /*-
  * #%L
@@ -35,11 +35,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
+import org.liveontologies.protege.explanation.proof.ProofServiceManager;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.ui.preferences.PreferencesLayoutPanel;
 import org.protege.editor.owl.ui.preferences.OWLPreferencesPanel;
 
-public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
+public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferencesPanel {
 
 	private static final long serialVersionUID = 8585913940466665136L;
 
@@ -59,7 +61,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		addRemoveUnnecessaryInferencesSettings(panel);
 		panel.addGroup("");
 		panel.addGroupComponent(buildResetComponent());
-		loadFrom(ProofBasedExplanationPreferences.create().load());
+		loadFrom(ProofBasedExplPrefs.create().load());
 	}
 
 	@Override
@@ -69,13 +71,13 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 
 	@Override
 	public void applyChanges() {
-		ProofBasedExplanationPreferences prefs = ProofBasedExplanationPreferences
+		ProofBasedExplPrefs prefs = ProofBasedExplPrefs
 				.create();
 		saveTo(prefs);
 		prefs.save();
 	}
 
-	private void loadFrom(ProofBasedExplanationPreferences prefs) {
+	private void loadFrom(ProofBasedExplPrefs prefs) {
 		recursiveExpansionLimitModel_.setValue(prefs.recursiveExpansionLimit);
 		displayedInferencesPerConclusionLimitModel_
 				.setValue(prefs.displayedInferencesPerConclusionLimit);
@@ -83,7 +85,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 				.setSelected(prefs.removeUnnecessaryInferences);
 	}
 
-	private void saveTo(ProofBasedExplanationPreferences prefs) {
+	private void saveTo(ProofBasedExplPrefs prefs) {
 		prefs.recursiveExpansionLimit = recursiveExpansionLimitModel_
 				.getNumber().intValue();
 		prefs.displayedInferencesPerConclusionLimit = displayedInferencesPerConclusionLimitModel_
@@ -116,7 +118,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		JComponent spinner = new JSpinner(recursiveExpansionLimitModel_);
 		spinner.setMaximumSize(spinner.getPreferredSize());
 		panel.addGroupComponent(spinner);
-		String tooltip = ProofBasedExplanationPreferences.RECURSIVE_EXPANSION_LIMIT_DESCRIPTION;
+		String tooltip = ProofBasedExplPrefs.RECURSIVE_EXPANSION_LIMIT_DESCRIPTION;
 		spinner.setToolTipText(tooltip);
 	}
 
@@ -130,7 +132,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 		displayedInferencesPerConclusionLimitModel_.setMaximum(999);
 		spinner.setMaximumSize(spinner.getPreferredSize());
 		panel.addGroupComponent(spinner);
-		String tooltip = ProofBasedExplanationPreferences.DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION;
+		String tooltip = ProofBasedExplPrefs.DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION;
 		spinner.setToolTipText(tooltip);
 	}
 
@@ -140,7 +142,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 				"Remove unnecessary inferences");
 		panel.addGroupComponent(removeUnnecessaryInferences_);
 		removeUnnecessaryInferences_.setToolTipText(
-				ProofBasedExplanationPreferences.REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION);
+				ProofBasedExplPrefs.REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION);
 	}
 
 	private JComponent buildResetComponent() {
@@ -152,7 +154,7 @@ public class ProofBasedExplanationPreferencesPanel extends OWLPreferencesPanel {
 	}
 
 	private void reset() {
-		loadFrom(ProofBasedExplanationPreferences.create());
+		loadFrom(ProofBasedExplPrefs.create());
 	}
 
 }

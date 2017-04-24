@@ -30,10 +30,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.liveontologies.protege.explanation.proof.OWLRenderer;
-import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.liveontologies.protege.explanation.proof.ProofManager;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomChecker;
 import org.liveontologies.protege.explanation.proof.editing.OWLAxiomEditor;
+import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.puli.ProofNode;
 import org.protege.editor.owl.OWLEditorKit;
 import org.protege.editor.owl.ui.editor.OWLObjectEditor;
@@ -80,7 +80,7 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 
 	/**
 	 * see
-	 * {@link ProofBasedExplanationPreferences#displayedInferencesPerConclusionLimit}
+	 * {@link ProofBasedExplPrefs#displayedInferencesPerConclusionLimit}
 	 */
 	private final int displayedInferencesPerConclusionLimit_; // rows
 
@@ -96,7 +96,7 @@ public class ProofFrame implements OWLFrame<ProofRoot> {
 		};
 		this.checker_ = new OWLAxiomChecker(kit_.getModelManager());
 		this.editor_ = new OWLAxiomEditor(kit_, checker_);
-		this.displayedInferencesPerConclusionLimit_ = ProofBasedExplanationPreferences
+		this.displayedInferencesPerConclusionLimit_ = ProofBasedExplPrefs
 				.create().load().displayedInferencesPerConclusionLimit;
 		updateProof();
 	}

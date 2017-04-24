@@ -3,7 +3,8 @@
 <plugin>
 
 	<extension-point id="service" name="Proof Service" schema="schema/${extensionId}.exsd"/>
-	
+	<extension-point id="preferences" name="Proof Preferences" schema="schema/${extensionPreferencesId}.exsd"/>
+		
     <extension id="ProofBasedExplanation"
                point="org.protege.editor.owl.explanation">
         <name value="Proof Based Explanation"/>
@@ -13,13 +14,19 @@
     <extension id="ProofBasedInconsistencyExplanation"
                point="org.protege.editor.owl.inconsistentOntologyExplanation">
         <name value="Proof Based Inconsistent Ontology Explanation"/>
-        <class value="${pluginId}.ProofBasedInconsistencyExplanationPlugin"/>        
+        <class value="${pluginId}.ProofBasedInconsistencyExplanationPlugin"/>
     </extension>
-    
-   <extension id="ProofBasedExplanationPreferences"
+
+    <extension id="ProofBasedExplanationPreferences"
                point="org.protege.editor.core.application.explanationpreferencespanel">
-       <label value="Proofs"/>
-       <class value="${pluginId}.ProofBasedExplanationPreferencesPanel"/>
-   </extension> 
+        <label value="Proofs"/>
+        <class value="${pluginId}.preferences.ProofPrefPanel"/>
+    </extension>
+
+    <extension id="ProofGeneralPreferences"
+               point="org.liveontologies.protege.explanation.proof.preferences">
+        <label value="General"/>
+        <class value="${pluginId}.preferences.ProofBasedExplanationPreferencesGeneralPanel"/>
+    </extension>
 
 </plugin>
