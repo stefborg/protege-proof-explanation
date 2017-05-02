@@ -7,7 +7,7 @@
 		
     <extension id="ProofBasedExplanation"
                point="org.protege.editor.owl.explanation">
-        <name value="Proof Based Explanation"/>
+        <name value="Proofs"/>
         <class value="${pluginId}.ProofBasedExplanationService"/>
     </extension>
 
