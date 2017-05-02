@@ -35,7 +35,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.liveontologies.protege.explanation.proof.ProofBasedExplanationPreferences;
 import org.liveontologies.protege.explanation.proof.ProofServiceManager;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.ui.preferences.PreferencesLayoutPanel;

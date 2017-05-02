@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
+import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.liveontologies.puli.DynamicInferenceSet;
 import org.liveontologies.puli.InferenceSets;
@@ -168,7 +169,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 			} else {
 				Set<OWLAxiom> stated = importsClosureRec_
 						.getStatedAxiomsWithoutAnnotations();
-				boolean removeUnnecessaryInferences = ProofBasedExplanationPreferences
+				boolean removeUnnecessaryInferences = ProofBasedExplPrefs
 						.create().load().removeUnnecessaryInferences;
 				proofRoot_ = ProofNodes.create(
 						removeUnnecessaryInferences ? InferenceSets
