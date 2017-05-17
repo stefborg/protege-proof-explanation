@@ -1,11 +1,3 @@
-package org.liveontologies.protege.explanation.proof.service;
-
-import org.liveontologies.puli.AssertedConclusionInference;
-import org.liveontologies.puli.DynamicInferenceSet;
-import org.liveontologies.puli.Inference;
-import org.liveontologies.puli.ProofNode;
-import org.liveontologies.puli.ProofStep;
-
 /*
  * #%L
  * Proof-Based Explanations
@@ -27,7 +19,13 @@ import org.liveontologies.puli.ProofStep;
  * limitations under the License.
  * #L%
  */
+package org.liveontologies.protege.explanation.proof.service;
 
+import org.liveontologies.puli.AssertedConclusionInference;
+import org.liveontologies.puli.DynamicProof;
+import org.liveontologies.puli.Inference;
+import org.liveontologies.puli.ProofNode;
+import org.liveontologies.puli.ProofStep;
 import org.protege.editor.core.plugin.ProtegePluginInstance;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -86,14 +84,14 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 * 
 	 * @param entailment
 	 *            the {@link OWLAxiom} for which the proof should be generated
-	 * @return the {@link DynamicInferenceSet} representing the set of
-	 *         inferences using which the given {@link OWLAxiom} can be derived
-	 *         from the axioms in the ontology
+	 * @return the {@link DynamicProof} representing the set of inferences using
+	 *         which the given {@link OWLAxiom} can be derived from the axioms
+	 *         in the ontology
 	 * @throws UnsupportedEntailmentTypeException
 	 *             if checking entailment of the given given {@link OWLAxiom} is
 	 *             not supported
 	 */
-	public abstract DynamicInferenceSet<OWLAxiom> getProof(OWLAxiom entailment)
+	public abstract DynamicProof<OWLAxiom> getProof(OWLAxiom entailment)
 			throws UnsupportedEntailmentTypeException;
 
 	/**
@@ -114,9 +112,9 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 * 
 	 * @param node
 	 *            the {@link ProofNode} representing the acyclic proof tree
-	 *            obtained from the inference set returned by
+	 *            obtained from the proof returned by
 	 *            {@link #getProof(OWLAxiom)}; the proof steps in this proof can
-	 *            use only inferences from this inference set or the
+	 *            use only inferences from this proof or the
 	 *            {@link AssertedConclusionInference} for inferences from the
 	 *            axioms in the ontology. A {@link ProofNode} is acyclic if any
 	 *            path induced by the conclusion -> premise relation in the

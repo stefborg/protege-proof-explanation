@@ -1,8 +1,6 @@
-package org.liveontologies.protege.explanation.proof;
-
 /*-
- * #%L
  * Protege Proof-Based Explanation
+ * #%L
  * $Id:$
  * $HeadURL:$
  * %%
@@ -21,6 +19,7 @@ package org.liveontologies.protege.explanation.proof;
  * limitations under the License.
  * #L%
  */
+package org.liveontologies.protege.explanation.proof;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,8 +30,8 @@ import javax.swing.SwingUtilities;
 
 import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
-import org.liveontologies.puli.DynamicInferenceSet;
-import org.liveontologies.puli.InferenceSets;
+import org.liveontologies.puli.Proofs;
+import org.liveontologies.puli.DynamicProof;
 import org.liveontologies.puli.LeafProofNode;
 import org.liveontologies.puli.ProofNode;
 import org.liveontologies.puli.ProofNodes;
@@ -49,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * @author Yevgeny Kazakov
  */
 public class ProofManager implements ImportsClosureRecord.ChangeListener,
-		DynamicInferenceSet.ChangeListener, Disposable {
+		DynamicProof.ChangeListener, Disposable {
 
 	// logger for this class
 	private static final Logger LOGGER_ = LoggerFactory
@@ -73,7 +72,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	/**
 	 * the inferences proving {@link #entailment_} returned by the proof service
 	 */
-	private DynamicInferenceSet<OWLAxiom> proof_ = null;
+	private DynamicProof<OWLAxiom> proof_ = null;
 
 	/**
 	 * an object using which examples of inferences can be obtained; those are
@@ -171,9 +170,8 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 						.getStatedAxiomsWithoutAnnotations();
 				boolean removeUnnecessaryInferences = ProofBasedExplPrefs
 						.create().load().removeUnnecessaryInferences;
-				proofRoot_ = ProofNodes.create(
-						removeUnnecessaryInferences ? InferenceSets
-								.prune(proof_, entailment_, stated) : proof_,
+				proofRoot_ = ProofNodes.create(removeUnnecessaryInferences
+						? Proofs.prune(proof_, entailment_, stated) : proof_,
 						entailment_);
 				proofRoot_ = ProofNodes.addAssertedInferences(proofRoot_,
 						stated);
