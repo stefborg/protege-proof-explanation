@@ -26,15 +26,14 @@
 	<dependencySets>
 		<!-- the description of the maven packages to be bundled in the archive -->
 		<dependencySet>
-			<scope>provided</scope>
-			<includes>
-				<include>${project.groupId}:*:*</include>
-			</includes>
+			<excludes>
+				<exclude>edu.stanford.protege:*:*</exclude>
+				<exclude>net.sourceforge.owlapi:*:*</exclude>
+				<exclude>com.google.guava:*:*</exclude>
+				<exclude>org.slf4j:*:*</exclude>
+			</excludes>
 			<useStrictFiltering>true</useStrictFiltering>
-			<useProjectArtifact>false</useProjectArtifact>
-		</dependencySet>
-		<dependencySet>
-			<useProjectArtifact>true</useProjectArtifact>
+			<useTransitiveFiltering>true</useTransitiveFiltering>
 		</dependencySet>
 	</dependencySets>
 </assembly>
