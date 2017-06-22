@@ -30,11 +30,11 @@ import javax.swing.SwingUtilities;
 
 import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
-import org.liveontologies.puli.Proofs;
 import org.liveontologies.puli.DynamicProof;
 import org.liveontologies.puli.LeafProofNode;
 import org.liveontologies.puli.ProofNode;
 import org.liveontologies.puli.ProofNodes;
+import org.liveontologies.puli.Proofs;
 import org.protege.editor.core.Disposable;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -143,7 +143,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * 
 	 * @see #getEntailment()
 	 */
-	public synchronized void setProofService(ProofService proofService) {
+	public synchronized void selectService(ProofService proofService) {
 		proofService_ = proofService;
 		if (proof_ != null) {
 			proof_.removeListener(this);
@@ -159,7 +159,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 *         current proof service
 	 * 
 	 * @see #getEntailment()
-	 * @see #setProofService(ProofService)
+	 * @see #selectService(ProofService)
 	 */
 	public synchronized ProofNode<OWLAxiom> getProofRoot() {
 		if (!proofRootUpToDate_) {
@@ -226,7 +226,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * 
 	 * @see #getEntailment()
 	 */
-	public Collection<ProofService> getProofServices() {
+	public Collection<ProofService> getServices() {
 		List<ProofService> result = new ArrayList<ProofService>();
 		for (ProofService service : proofServiceMan_.getProofServices()) {
 			if (service.hasProof(entailment_)) {

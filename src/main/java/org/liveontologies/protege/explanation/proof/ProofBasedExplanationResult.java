@@ -68,12 +68,12 @@ public class ProofBasedExplanationResult extends ExplanationResult
 		this.kit_ = proofManager.getOWLEditorKit();
 
 		Collection<ProofService> proofServices = proofManager_
-				.getProofServices();
+				.getServices();
 		switch (proofServices.size()) {
 		case 0:
 			break;
 		case 1:
-			proofManager_.setProofService(proofServices.iterator().next());
+			proofManager_.selectService(proofServices.iterator().next());
 			break;
 		default:
 			JComboBox<ProofService> proofServiceSelector = createComboBox(
@@ -115,12 +115,12 @@ public class ProofBasedExplanationResult extends ExplanationResult
 				services);
 		if (services.length > 0) {
 			selector.setSelectedItem(services[0]);
-			proofManager_.setProofService(services[0]);
+			proofManager_.selectService(services[0]);
 		}
 		selector.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				proofManager_.setProofService(
+				proofManager_.selectService(
 						(ProofService) selector.getSelectedItem());
 			}
 		});
