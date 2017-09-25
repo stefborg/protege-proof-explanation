@@ -32,6 +32,7 @@ import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPr
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.liveontologies.puli.DynamicProof;
 import org.liveontologies.puli.LeafProofNode;
+import org.liveontologies.puli.Proof;
 import org.liveontologies.puli.ProofNode;
 import org.liveontologies.puli.ProofNodes;
 import org.liveontologies.puli.Proofs;
@@ -170,11 +171,15 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 						.getStatedAxiomsWithoutAnnotations();
 				boolean removeUnnecessaryInferences = ProofBasedExplPrefs
 						.create().load().removeUnnecessaryInferences;
-				proofRoot_ = ProofNodes.create(removeUnnecessaryInferences
-						? Proofs.prune(proof_, entailment_, stated) : proof_,
-						entailment_);
-				proofRoot_ = ProofNodes.addAssertedInferences(proofRoot_,
+				// apply the proof to the current asserted axioms
+				Proof<OWLAxiom> processedProof = Proofs
+						.removeAssertedInferences(proof_);
+				processedProof = Proofs.addAssertedInferences(processedProof,
 						stated);
+				if (removeUnnecessaryInferences) {
+					processedProof = Proofs.prune(processedProof, entailment_);
+				}
+				proofRoot_ = ProofNodes.create(processedProof, entailment_);
 				proofRoot_ = ProofNodes
 						.eliminateNotDerivableAndCycles(proofRoot_);
 				if (proofService_ != null && proofRoot_ != null) {
