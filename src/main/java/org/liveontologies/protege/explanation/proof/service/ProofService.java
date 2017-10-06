@@ -24,8 +24,11 @@ package org.liveontologies.protege.explanation.proof.service;
 import org.liveontologies.puli.AssertedConclusionInference;
 import org.liveontologies.puli.DynamicProof;
 import org.liveontologies.puli.Inference;
+import org.liveontologies.puli.Inferences;
+import org.liveontologies.puli.Proof;
 import org.liveontologies.puli.ProofNode;
 import org.liveontologies.puli.ProofStep;
+import org.liveontologies.puli.Proofs;
 import org.protege.editor.core.plugin.ProtegePluginInstance;
 import org.protege.editor.owl.OWLEditorKit;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -76,17 +79,21 @@ public abstract class ProofService implements ProtegePluginInstance {
 	public abstract boolean hasProof(OWLAxiom entailment);
 
 	/**
-	 * Returns a proof for the given {@link OWLAxiom} as sets of inferences over
-	 * {@link OWLAxiom}s. Using these inferences it should be possible to derive
-	 * the given {@link OWLAxiom} from the axoioms in the ontology, if it is
-	 * entailed. If the axiom cannot be derived, the result may be any inference
-	 * set, e.g., the empty one.
+	 * Returns a proof for the given {@link OWLAxiom} containing inferences over
+	 * {@link OWLAxiom}s using which it should be possible to derive the given
+	 * {@link OWLAxiom}. In this proof, {@link OWLAxiom}s occurring in the
+	 * ontology can be derived using {@link AssertedConclusionInference}. If the
+	 * given {@link OWLAxiom} is not entailed, the result may be any proof in
+	 * which this {@link OWLAxiom} is not derivable, e.g., the empty proof.
+	 * 
+	 * @see Proofs#isDerivable(Proof, Object)
+	 * @see Inferences#isAsserted(Inference)
+	 * @see Proofs#emptyProof()
 	 * 
 	 * @param entailment
 	 *            the {@link OWLAxiom} for which the proof should be generated
 	 * @return the {@link DynamicProof} representing the set of inferences using
-	 *         which the given {@link OWLAxiom} can be derived from the axioms
-	 *         in the ontology
+	 *         which the given {@link OWLAxiom} can be derived
 	 * @throws UnsupportedEntailmentTypeException
 	 *             if checking entailment of the given given {@link OWLAxiom} is
 	 *             not supported
