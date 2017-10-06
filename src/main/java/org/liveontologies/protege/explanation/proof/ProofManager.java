@@ -31,6 +31,7 @@ import javax.swing.SwingUtilities;
 import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.liveontologies.puli.DynamicProof;
+import org.liveontologies.puli.Inference;
 import org.liveontologies.puli.LeafProofNode;
 import org.liveontologies.puli.Proof;
 import org.liveontologies.puli.ProofNode;
@@ -73,7 +74,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	/**
 	 * the inferences proving {@link #entailment_} returned by the proof service
 	 */
-	private DynamicProof<OWLAxiom> proof_ = null;
+	private DynamicProof<Inference<? extends OWLAxiom>> proof_ = null;
 
 	/**
 	 * an object using which examples of inferences can be obtained; those are
@@ -171,11 +172,9 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 						.getStatedAxiomsWithoutAnnotations();
 				boolean removeUnnecessaryInferences = ProofBasedExplPrefs
 						.create().load().removeUnnecessaryInferences;
-				// apply the proof to the current asserted axioms
-				Proof<OWLAxiom> processedProof = Proofs
-						.removeAssertedInferences(proof_);
-				processedProof = Proofs.addAssertedInferences(processedProof,
-						stated);
+				// restrict the proof to the current asserted axioms
+				Proof<Inference<? extends OWLAxiom>> processedProof = Proofs
+						.removeAssertedInferences(proof_, stated);
 				if (removeUnnecessaryInferences) {
 					processedProof = Proofs.prune(processedProof, entailment_);
 				}

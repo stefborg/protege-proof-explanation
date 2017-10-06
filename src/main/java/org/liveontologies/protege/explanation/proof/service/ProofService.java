@@ -91,8 +91,8 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 *             if checking entailment of the given given {@link OWLAxiom} is
 	 *             not supported
 	 */
-	public abstract DynamicProof<OWLAxiom> getProof(OWLAxiom entailment)
-			throws UnsupportedEntailmentTypeException;
+	public abstract DynamicProof<Inference<? extends OWLAxiom>> getProof(
+			OWLAxiom entailment) throws UnsupportedEntailmentTypeException;
 
 	/**
 	 * This method provides examples that explain inferences used in the proof
@@ -103,8 +103,8 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 *         explanation purpose. Usually it is an inference instantiated with
 	 *         some generic parameters. If {@code null}, no example is provided.
 	 */
-	abstract public Inference<OWLAxiom> getExample(
-			Inference<OWLAxiom> inference);
+	abstract public Inference<? extends OWLAxiom> getExample(
+			Inference<? extends OWLAxiom> inference);
 
 	/**
 	 * Using this method the displayed proof can be additionally post-processed

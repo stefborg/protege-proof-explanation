@@ -108,7 +108,7 @@ class InferenceRow extends AbstractProofFrameListRow<ConclusionSection>
 		if (proofService == null) {
 			return null;
 		}
-		Inference<OWLAxiom> example = proofService
+		Inference<? extends OWLAxiom> example = proofService
 				.getExample(section_.getInference().getInference());
 		if (example == null) {
 			return null;
