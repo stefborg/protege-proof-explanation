@@ -40,7 +40,8 @@ implements PreferencesPanelPlugin {
 		this.kit = kit;
 	}
 	
-    public String getLabel() {
+    @Override
+	public String getLabel() {
         return getPluginProperty(LABEL_PARAM);
     }
 

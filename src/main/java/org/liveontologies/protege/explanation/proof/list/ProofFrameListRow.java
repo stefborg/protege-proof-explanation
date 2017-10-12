@@ -78,11 +78,14 @@ public interface ProofFrameListRow extends Disposable {
 	 * @return the text to be shown on mouse over
 	 */
 	String getTooltip();
-	
+
 	/**
 	 * Sets the index position of this row to the given value
 	 * 
 	 * @param index
+	 *            the new index value of this row
+	 * 
+	 * @see #getIndex()
 	 */
 	void setIndex(int index);
 
@@ -92,24 +95,27 @@ public interface ProofFrameListRow extends Disposable {
 	void toggleExpandState();
 
 	/**
-	 * Sets {@link #isExpanded()} for this row and recursively for its children
-	 * to {@code true} until reaching the given limit (that is, at most the
-	 * limit number of descendants will be expanded). If limit <= 0, nothing
-	 * changes.
+	 * Sets {@link #isExpanded()} to {@code true} for this row and recursively
+	 * for its children until reaching the given limit (that is, at most the
+	 * limit number of descendants will be expanded). If limit is 0 or less,
+	 * nothing changes.
 	 * 
 	 * @param limit
+	 *            the maximal number of descendant rows which can be expanded
 	 * 
+	 * @see #isExpanded()
 	 * @see #getChildren()
 	 */
 	void expandRecursively(int limit);
 
 	/**
-	 * Sets {@link #isExpanded()} for this row and recursively for its children
-	 * to {@code false} until reaching the given limit (that is, at most the
-	 * limit number of descendants will be expanded). If limit <= 0, nothing
-	 * changes.
+	 * Sets {@link #isExpanded()} to {@code false} for this row and recursively
+	 * for its children until reaching the given limit (that is, at most the
+	 * limit number of descendants will be collapsed). If limit is 0 or less,
+	 * nothing changes.
 	 * 
 	 * @param limit
+	 *            the maximal number of descendant rows which can be collapsed
 	 * 
 	 * @see #getChildren()
 	 */
@@ -121,11 +127,11 @@ public interface ProofFrameListRow extends Disposable {
 	void toggleHighlight();
 
 	/**
-	 * Matches this row to the given object to check if they are similar
-	 * (usually this means that they have the same content when they are
-	 * displayed)
+	 * Matches this row to the given object to check if they are similar (that
+	 * is, the object is a row and it has the same content when displayed)
 	 * 
 	 * @param o
+	 *            the object to be matched against this row
 	 * @return {@code true} if this row matches the given object and
 	 *         {@code false} otherwise
 	 */
@@ -149,16 +155,22 @@ public interface ProofFrameListRow extends Disposable {
 	int getListMaxWidth();
 
 	/**
-	 * ensures that {@link #getCachedRowHeight} is equal to the given value
+	 * Ensure that {@link #getCachedRowHeight} is equal to the given value
 	 * 
 	 * @param height
+	 *            the row height value to be set
+	 * 
+	 * @see #getCachedRowHeight()
 	 */
 	void setCachedRowHeight(int height);
 
 	/**
-	 * ensures that {@link #getListMinWidth()} is equal to the given value
+	 * Ensure that {@link #getListMinWidth()} is equal to the given value
 	 * 
 	 * @param width
+	 *            the row minimum width value to be set
+	 * 
+	 * @see #getListMinWidth()
 	 */
 	void setListMinWidth(int width);
 
@@ -166,6 +178,8 @@ public interface ProofFrameListRow extends Disposable {
 	 * ensures that {@link #getListMaxWidth()} is equal to the given value
 	 * 
 	 * @param width
+	 *            the row maximum width value to be set
+	 * @see #getListMaxWidth()
 	 */
 	void setListMaxWidth(int width);
 
@@ -177,6 +191,7 @@ public interface ProofFrameListRow extends Disposable {
 	 * @author Yevgeny Kazakov
 	 *
 	 * @param <O>
+	 *            the type of the output for the visitor methods
 	 */
 	interface Visitor<O> {
 

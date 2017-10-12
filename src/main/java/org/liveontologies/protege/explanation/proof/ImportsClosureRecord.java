@@ -40,7 +40,6 @@ import com.google.common.collect.ListMultimap;
  * Represents the import closure of an ontology.
  * 
  * @author Yevgeny Kazakov
- *
  */
 public class ImportsClosureRecord {
 
@@ -94,27 +93,29 @@ public class ImportsClosureRecord {
 	}
 
 	/**
-	 * @param key
+	 * @param axiom
+	 *            axiom to search for
 	 * @return the list of ontologies in the import closure which contain the
 	 *         given axiom (possibly with different annotations); the matching
 	 *         axiom can be found in the corresponding position of
 	 *         {@link #getMatchingAxioms(OWLAxiom)}
 	 */
-	public synchronized List<OWLOntology> getHomeOntologies(OWLAxiom key) {
+	public synchronized List<OWLOntology> getHomeOntologies(OWLAxiom axiom) {
 		updateIfNeeded();
-		return axiomOccurrences_.get(key.getAxiomWithoutAnnotations());
+		return axiomOccurrences_.get(axiom.getAxiomWithoutAnnotations());
 	}
 
 	/**
-	 * @param key
+	 * @param axiom
+	 *            axioms to search for
 	 * @return the list of axioms occurring in the import closure that are equal
 	 *         to the given axiom modulo annotations; the ontologies in which
 	 *         these axioms occur can be found in the corresponding positions of
 	 *         {@link #getHomeOntologies(OWLAxiom)}
 	 */
-	public synchronized List<OWLAxiom> getMatchingAxioms(OWLAxiom key) {
+	public synchronized List<OWLAxiom> getMatchingAxioms(OWLAxiom axiom) {
 		updateIfNeeded();
-		return originalAxioms_.get(key.getAxiomWithoutAnnotations());
+		return originalAxioms_.get(axiom.getAxiomWithoutAnnotations());
 	}
 
 	/**
@@ -178,7 +179,7 @@ public class ImportsClosureRecord {
 		}
 		return true;
 	}
-	
+
 	void invalidateLater() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -187,7 +188,7 @@ public class ImportsClosureRecord {
 			}
 		});
 	}
-	
+
 	public interface ChangeListener {
 
 		void statedAxiomsChanged();

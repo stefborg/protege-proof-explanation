@@ -34,6 +34,8 @@ import org.protege.editor.core.Disposable;
  * @author Yevgeny Kazakov
  *
  * @param <C>
+ *            the type of the child sections of this row
+ * 
  */
 public abstract class AbstractProofFrameListRow<C extends AbstractProofFrameListRow<?>>
 		implements ProofFrameListRow, Disposable {

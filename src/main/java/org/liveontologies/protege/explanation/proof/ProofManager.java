@@ -142,6 +142,8 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 * Sets the object from which the proofs for entailment are obtained
 	 * 
 	 * @param proofService
+	 *            the {@link ProofService} to be used for obtaining the
+	 *            entailments
 	 * 
 	 * @see #getEntailment()
 	 */
@@ -203,25 +205,32 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	}
 
 	/**
-	 * @param key
+	 * Searchers for ontologies in the imports closure containing the given
+	 * axiom
+	 * 
+	 * @param axiom
+	 *            the {@link OWLAxiom} to search for
 	 * @return the list of ontologies in the import closure which contain the
 	 *         given axiom (possibly with different annotations); the matching
 	 *         axiom can be found in the corresponding position of
 	 *         {@link #getMatchingAxioms(OWLAxiom)}
 	 */
-	public List<? extends OWLOntology> getHomeOntologies(OWLAxiom key) {
-		return importsClosureRec_.getHomeOntologies(key);
+	public List<? extends OWLOntology> getHomeOntologies(OWLAxiom axiom) {
+		return importsClosureRec_.getHomeOntologies(axiom);
 	}
 
 	/**
-	 * @param key
+	 * Searchers for matching axioms in the imports closure
+	 * 
+	 * @param axiom
+	 *            the {@link OWLAxiom} to search for
 	 * @return the list of axioms occurring in the import closure that are equal
 	 *         to the given axiom modulo annotations; the ontologies in which
 	 *         these axioms occur can be found in the corresponding positions of
 	 *         {@link #getHomeOntologies(OWLAxiom)}
 	 */
-	public List<? extends OWLAxiom> getMatchingAxioms(OWLAxiom key) {
-		return importsClosureRec_.getMatchingAxioms(key);
+	public List<? extends OWLAxiom> getMatchingAxioms(OWLAxiom axiom) {
+		return importsClosureRec_.getMatchingAxioms(axiom);
 	}
 
 	/**

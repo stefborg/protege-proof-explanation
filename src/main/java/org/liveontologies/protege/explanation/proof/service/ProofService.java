@@ -72,6 +72,8 @@ public abstract class ProofService implements ProtegePluginInstance {
 
 	/**
 	 * @param entailment
+	 *            the entailed {@link OWLAxiom} for which the proof should be
+	 *            found
 	 * @return {@code true} if this service can provide a proof for the given
 	 *         entailed {@link OWLAxiom}; the subsequent call of
 	 *         {@link #getProof(OWLAxiom)} should return such a proof
@@ -105,6 +107,7 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 * This method provides examples that explain inferences used in the proof
 	 * 
 	 * @param inference
+	 *            an {@link Inference} that should be explained
 	 * 
 	 * @return an example of the given inference, which can be used for
 	 *         explanation purpose. Usually it is an inference instantiated with
@@ -124,9 +127,9 @@ public abstract class ProofService implements ProtegePluginInstance {
 	 *            use only inferences from this proof or the
 	 *            {@link AssertedConclusionInference} for inferences from the
 	 *            axioms in the ontology. A {@link ProofNode} is acyclic if any
-	 *            path induced by the conclusion -> premise relation in the
-	 *            proof tree represented by this {@link ProofNode} does not
-	 *            contain repetitions (i.e., equal {@link ProofNode}s).
+	 *            path induced by the conclusion - premise relation in the proof
+	 *            tree represented by this {@link ProofNode} does not contain
+	 *            repetitions (i.e., equal {@link ProofNode}s).
 	 * 
 	 * @return the rewritten acyclic {@link ProofNode} that should be used to
 	 *         display the proof
