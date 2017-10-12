@@ -17,6 +17,8 @@ be provided by other Protege plug-ins. The main functionality of this plug-in
 is displaying, navigating, and updating those proofs in the user interface.    	
 	</description>
 
+	<url>https://github.com/liveontologies/${project.artifactId}</url>
+
 	<scm>
 		<connection>scm:git:https://github.com/liveontologies/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:git@github.com:liveontologies/${project.artifactId}.git</developerConnection>
@@ -116,12 +118,12 @@ is displaying, navigating, and updating those proofs in the user interface.
 			<groupId>edu.stanford.protege</groupId>
 			<artifactId>protege-editor-owl</artifactId>
 			<version>${protege.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>owlapi-osgidistribution</artifactId>
 			<version>${owlapi.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>puli</artifactId>
