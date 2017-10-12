@@ -26,14 +26,11 @@
 	<dependencySets>
 		<!-- the description of the maven packages to be bundled in the archive -->
 		<dependencySet>
-			<excludes>
-				<exclude>edu.stanford.protege:*:*</exclude>
-				<exclude>net.sourceforge.owlapi:*:*</exclude>
-				<exclude>com.google.guava:*:*</exclude>
-				<exclude>org.slf4j:*:*</exclude>
-			</excludes>
+			<includes>
+				<include>${project.groupId}:${project.artifactId}:${project.packaging}</include>
+				<include>${project.groupId}:puli:jar</include>
+			</includes>
 			<useStrictFiltering>true</useStrictFiltering>
-			<useTransitiveFiltering>true</useTransitiveFiltering>
 		</dependencySet>
 	</dependencySets>
 </assembly>
