@@ -75,6 +75,16 @@ is displaying, navigating, and updating those proofs in the user interface.
 			</roles>
 			<timezone>1</timezone>
 		</developer>
+		<developer>
+			<id>saa</id>
+			<name>Alexander Stupnikov</name>
+			<email>saarus72@gmail.com</email>
+			<organization>Tyumen State University, Russia</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>5</timezone>
+		</developer>
 	</developers>
 
 	<properties>

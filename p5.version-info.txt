@@ -12,17 +12,25 @@ Changes in this version:
 New features:
 - Use Protege OWL Frame List to display proofs; axioms can be edited and deleted; proofs are expanded upon triggering the explain button. 
 - Highlight premises if an inference is selected in the list. 
-- Eliminate cycles in proofs: a proof for an axiom will not use this axioms as one of the premises [owlapi-proof bundle]. 
+- Eliminate cycles in proofs: a proof for an axiom will not use this axioms as one of the premises. 
 - Update proof after changes in the ontologies without recomputing the proof: if an axiom is changed or removed it is removed from the asserted axioms of the proof. 
-- Simplify cycle elimination using convenient utilities for testing derivability [owlapi-proof bundle]. 
+- Simplify cycle elimination using the PULi library. 
 - Define an extension point for proof services; add management of proof services in the UI. 
-- Add a manager to keep track of import closure to quickly check if an axiom is asserted. 
-- Support axioms from import ontologies in proofs, including management of duplicate axioms. 
+- Add a manager to keep track of the import closure to quickly check if an axiom is asserted. 
+- Support axioms from import ontologies in proofs, including management of duplicate axioms (with different annotations). 
 - Reuse the display setting (e.g., row expansion state, selection) for proof parts remained after proof changes. 
-- Support axioms with annotations and adding annotations to axioms in the proofs. 
 - Add tree-like navigation elements to the proofs UI; kept in synch with the current UI look and feel. 
+- Support the standard Protege buttons for explaining, annotating, removing, and editing of axioms in proofs. 
+- Distinguish between entailed (yeallow) and stated axioms in proofs; show this information in tooltips when placing the mouse pointer over the axioms. 
 - Expand and collapse rows recursively after long mouse press or ALT + click; a recursive expansion limit is used to avoid UI lockup in cases with huge proofs. 
 - Optimize rendering of proofs after expansion/collapse/resize by caching row heights values for list width values. 
+- Display examples of inferences used in the proofs as tooltips when the mouse pointer is held over the inferences. 
+- A new option to remove unnecessary inferences in proofs using the PULi library. 
+- Use Protege keyboard shortcuts (e.g., undo, redo) when the explanation window is active 
+- Define an extension point for proof preferences. 
+- Improve proof preferences panel by listing installed proof services and displaying their preferences in separate tabs. 
+Changes:
+- Highlight the conclusion of the selected inference in the proof. 
 
 
 Have fun!
