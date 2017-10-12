@@ -30,7 +30,7 @@ with other versions of Protege.
 
 INSTALLATION:
 
-To install, place all jar files inside the archive 
+To install, place ALL jar files inside the archive 
 
 	${plugin-zip.file}.zip 
 

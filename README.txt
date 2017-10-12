@@ -34,7 +34,7 @@ with other versions of Protege.
 
 INSTALLATION:
 
-To install, place all jar files inside the archive 
+To install, place ALL jar files inside the archive 
 
 	protege-proof-explanation-0.1.0-SNAPSHOT.zip 
 
