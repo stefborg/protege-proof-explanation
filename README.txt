@@ -36,7 +36,7 @@ INSTALLATION:
 
 To install, place ALL jar files inside the archive 
 
-	protege-proof-explanation-0.1.0.zip 
+	protege-proof-explanation-0.2.0-SNAPSHOT.zip 
 
 to the plugins folder of the Protege installation. The plug-in supports Protege
 Auto Update feature which can be used for upgrading to newer versions according

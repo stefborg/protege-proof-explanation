@@ -5,7 +5,7 @@
 
 	<artifactId>protege-proof-explanation</artifactId>
 	<groupId>org.liveontologies</groupId>
-	<version>0.1.0</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<name>Protege Proof-Based Explanation</name>

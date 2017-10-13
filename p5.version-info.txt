@@ -1,5 +1,5 @@
 The Live Ontologies Project team is pleased to announce 
-        the Protege Proof-Based Explanation 0.1.0 release!
+        the Protege Proof-Based Explanation 0.2.0 release!
 
 This is a plug-in that adds proof-based explanation facilities to the Protege 
 Desktop ontology editor. It registers as an extension to the Protege 
