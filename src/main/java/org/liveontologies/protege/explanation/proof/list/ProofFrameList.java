@@ -178,6 +178,9 @@ public class ProofFrameList extends OWLFrameList<ProofRoot> {
 		setCellRenderer(new ProofFrameListRenderer(editorKit));
 		getSelectionModel()
 				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		for (ListSelectionListener l : getListSelectionListeners()) {
+			removeListSelectionListener(l);
+		}
 		addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
