@@ -89,8 +89,8 @@ is displaying, navigating, and updating those proofs in the user interface.
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<protege.version>5.0.0</protege.version>
-		<owlapi.version>4.2.5</owlapi.version>
+		<protege.version>5.5.0</protege.version>
+		<owlapi.version>4.5.7</owlapi.version>
 		<pluginId>${project.groupId}.protege.explanation.proof</pluginId>
 		<extensionId>${pluginId}.service</extensionId>
 		<extensionPreferencesId>${pluginId}.preferences</extensionPreferencesId>

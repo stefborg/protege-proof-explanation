@@ -26,8 +26,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 import java.io.StringWriter;
-
-import javax.inject.Provider;
+import java.util.function.Supplier;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class OWLAxiomCheckerTest {
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(
 				getInputOntology("owl2primer.owl"));
 		ManchesterOWLSyntaxParser parser = new ManchesterOWLSyntaxParserPatched(
-				new Provider<OWLOntologyLoaderConfiguration>() {
+				new Supplier<OWLOntologyLoaderConfiguration>() {
 					@Override
 					public OWLOntologyLoaderConfiguration get() {
 						return new OWLOntologyLoaderConfiguration();

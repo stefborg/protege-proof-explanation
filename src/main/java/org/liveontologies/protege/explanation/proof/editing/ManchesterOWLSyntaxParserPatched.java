@@ -120,11 +120,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.semanticweb.owlapi.expression.OWLEntityChecker;
 import org.semanticweb.owlapi.expression.OWLOntologyChecker;
@@ -233,7 +233,7 @@ public class ManchesterOWLSyntaxParserPatched
 	// are specific to the Manchester OWL Syntax and are such that it should
 	// be easy to use this parser in tools such as editors.
 	@Nonnull
-	private Provider<OWLOntologyLoaderConfiguration> configProvider;
+	private Supplier<OWLOntologyLoaderConfiguration> configProvider;
 	@Nonnull
 	private Optional<OWLOntologyLoaderConfiguration> config = Optional.absent();
 	protected OWLDataFactory dataFactory;
@@ -280,7 +280,7 @@ public class ManchesterOWLSyntaxParserPatched
 	 */
 	@Inject
 	public ManchesterOWLSyntaxParserPatched(
-			@Nonnull Provider<OWLOntologyLoaderConfiguration> configurationProvider,
+			@Nonnull Supplier<OWLOntologyLoaderConfiguration> configurationProvider,
 			@Nonnull OWLDataFactory dataFactory) {
 		configProvider = configurationProvider;
 		this.dataFactory = dataFactory;
@@ -329,7 +329,7 @@ public class ManchesterOWLSyntaxParserPatched
 
 	@Override
 	public void setOntologyLoaderConfigurationProvider(
-			Provider<OWLOntologyLoaderConfiguration> provider) {
+			Supplier<OWLOntologyLoaderConfiguration> provider) {
 		configProvider = provider;
 	}
 

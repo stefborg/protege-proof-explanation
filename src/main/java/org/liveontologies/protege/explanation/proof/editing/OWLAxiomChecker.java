@@ -6,7 +6,7 @@ package org.liveontologies.protege.explanation.proof.editing;
  * $Id:$
  * $HeadURL:$
  * %%
- * Copyright (C) 2014 - 2016 Live Ontologies Project
+ * Copyright (C) 2014 - 2019 Live Ontologies Project
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ package org.liveontologies.protege.explanation.proof.editing;
  * #L%
  */
 
-import javax.inject.Provider;
+import java.util.function.Supplier;
 
 import org.protege.editor.owl.model.OWLModelManager;
 import org.protege.editor.owl.model.classexpression.OWLExpressionParserException;
@@ -70,7 +70,7 @@ public class OWLAxiomChecker implements OWLExpressionChecker<OWLAxiom> {
 	public OWLAxiom createObject(String text)
 			throws OWLExpressionParserException {
 		ManchesterOWLSyntaxParser parser = new ManchesterOWLSyntaxParserPatched(
-				new Provider<OWLOntologyLoaderConfiguration>() {
+				new Supplier<OWLOntologyLoaderConfiguration>() {
 					@Override
 					public OWLOntologyLoaderConfiguration get() {
 						return new OWLOntologyLoaderConfiguration();
