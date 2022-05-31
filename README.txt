@@ -1,6 +1,6 @@
 Protege Proof-Based Explanation
 
-Protege Proof-Based Explanation is Copyright (c) 2014 - 2021 
+Protege Proof-Based Explanation is Copyright (c) 2014 - 2022 
 Live Ontologies Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ https://github.com/liveontologies/protege-proof-explanation
 
 REQUIREMENTS:
 
-Protege Proof-Based Explanation is tested to work with Protege 5.5.0. It may work 
+Protege Proof-Based Explanation is tested to work with Protege 5.6.0-beta-1-SNAPSHOT. It may work 
 with other versions of Protege.
 
 INSTALLATION:

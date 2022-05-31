@@ -34,8 +34,10 @@ import javax.swing.SwingUtilities;
 
 import org.liveontologies.protege.explanation.proof.list.ProofFrame;
 import org.liveontologies.protege.explanation.proof.list.ProofFrameList;
+import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.owl.OWLEditorKit;
+import org.protege.editor.owl.ui.explanation.ExplanationPreferences;
 import org.protege.editor.owl.ui.explanation.ExplanationResult;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
@@ -113,15 +115,30 @@ public class ProofBasedExplanationResult extends ExplanationResult
 				.toArray(new ProofService[proofServices.size()]);
 		final JComboBox<ProofService> selector = new JComboBox<ProofService>(
 				services);
+		final ProofBasedExplPrefs prefs = ProofBasedExplPrefs.create().load();
 		if (services.length > 0) {
-			selector.setSelectedItem(services[0]);
-			proofManager_.selectService(services[0]);
+			ProofService selected = services[0];
+			if (ExplanationPreferences.create().load().useLastExplanationService) {
+				String id = prefs.defaultProofService;
+				if (id != null) {
+					for (ProofService s : proofServices) {
+						if (id.equals(s.getPluginId())) {
+							selected = s;
+						}
+					}
+				}
+			}
+			selector.setSelectedItem(selected);
+			proofManager_.selectService(selected);
 		}
 		selector.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				proofManager_.selectService(
-						(ProofService) selector.getSelectedItem());
+				ProofService selected = (ProofService) selector.getSelectedItem();
+				prefs.load();
+				prefs.defaultProofService = selected.getPluginId();
+				prefs.save();
+				proofManager_.selectService(selected);
 			}
 		});
 		return selector;

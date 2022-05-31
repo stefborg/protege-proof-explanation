@@ -56,7 +56,7 @@ public class ProofBasedExplanationService extends ExplanationService {
 
 	@Override
 	public boolean hasExplanation(OWLAxiom axiom) {
-		for (ProofService service : proofServiceMan_.getProofServices()) {
+		for (ProofService service : proofServiceMan_.getEnabledProofServices()) {
 			if (service.hasProof(axiom)) {
 				return true;
 			}

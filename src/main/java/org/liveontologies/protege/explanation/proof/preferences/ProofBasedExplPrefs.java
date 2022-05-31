@@ -1,5 +1,8 @@
 package org.liveontologies.protege.explanation.proof.preferences;
 
+import java.util.Collections;
+import java.util.List;
+
 /*-
  * #%L
  * Protege Proof-Based Explanation
@@ -30,7 +33,10 @@ public class ProofBasedExplPrefs {
 	private static final String PREFS_KEY_ = "PROOF_BASED_EXPLANATION_PREFS",
 			RECURSIVE_EXPANSION_LIMIT_KEY_ = "RECURSIVE_EXPANSION_LIMIT",
 			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_KEY = "DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT",
-			REMOVE_UNNECESSARY_INFERENCES_KEY = "REMOVE_UNNECESSARY_INFERENCES";
+			REMOVE_UNNECESSARY_INFERENCES_KEY = "REMOVE_UNNECESSARY_INFERENCES",
+			DEFAULT_PROOF_SERVICE_ID_KEY_ = "DEFAULT_PROOF_SERVICE",
+			PROOF_SERVICES_LIST_KEY_ = "EXPLANATION_SERVICES_LIST",
+			DISABLED_PROOF_SERVICES_KEY_ = "DISABLED_EXPLANATION_SERVICES";
 
 	public final static String RECURSIVE_EXPANSION_LIMIT_DESCRIPTION = "The maximal number of inferences expanded upon long press or alt + click",
 			DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_DESCRIPTION = "The maximal number of inferences displayed at once for each conclusion",
@@ -42,6 +48,12 @@ public class ProofBasedExplPrefs {
 	private final static int DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_ = 5;
 
 	private final static boolean DEFAULT_REMOVE_UNNECESSARY_INFERENCES_ = true;
+
+	private final static String DEFAULT_DEFAULT_PROOF_SERVICE_ID_ = null;
+	
+	private final static List<String> DEFAULT_PROOF_SERVICES_LIST_ = Collections.emptyList();
+	
+	private final static List<String> DEFAULT_DISABLED_PROOF_SERVICES_ = Collections.emptyList();
 
 	/**
 	 * {@value #RECURSIVE_EXPANSION_LIMIT_DESCRIPTION}
@@ -57,6 +69,21 @@ public class ProofBasedExplPrefs {
 	 * {@value #REMOVE_UNNECESSARY_INFERENCES_DESCRIPTION}
 	 */
 	public boolean removeUnnecessaryInferences = DEFAULT_REMOVE_UNNECESSARY_INFERENCES_;
+	
+	/**
+	 * The most recently used proof service
+	 */
+	public String defaultProofService = DEFAULT_DEFAULT_PROOF_SERVICE_ID_;
+	
+	/**
+	 * User-sorted list of all loaded proof services
+	 */
+	public List<String> proofServicesList =  DEFAULT_PROOF_SERVICES_LIST_;
+	
+	/**
+	 * List of all disabled proof services
+	 */
+	public List<String> disabledProofServices = DEFAULT_DISABLED_PROOF_SERVICES_;
 
 	private ProofBasedExplPrefs() {
 
@@ -85,6 +112,15 @@ public class ProofBasedExplPrefs {
 		removeUnnecessaryInferences = prefs.getBoolean(
 				REMOVE_UNNECESSARY_INFERENCES_KEY,
 				DEFAULT_REMOVE_UNNECESSARY_INFERENCES_);
+		defaultProofService = prefs.getString(
+				DEFAULT_PROOF_SERVICE_ID_KEY_,
+				DEFAULT_DEFAULT_PROOF_SERVICE_ID_);
+		proofServicesList = prefs.getStringList(
+				PROOF_SERVICES_LIST_KEY_,
+				DEFAULT_PROOF_SERVICES_LIST_);
+		disabledProofServices = prefs.getStringList(
+				DISABLED_PROOF_SERVICES_KEY_,
+				DEFAULT_DISABLED_PROOF_SERVICES_);
 		return this;
 	}
 
@@ -95,6 +131,9 @@ public class ProofBasedExplPrefs {
 				displayedInferencesPerConclusionLimit);
 		prefs.putBoolean(REMOVE_UNNECESSARY_INFERENCES_KEY,
 				removeUnnecessaryInferences);
+		prefs.putString(DEFAULT_PROOF_SERVICE_ID_KEY_, defaultProofService);
+		prefs.putStringList(PROOF_SERVICES_LIST_KEY_, proofServicesList);
+		prefs.putStringList(DISABLED_PROOF_SERVICES_KEY_, disabledProofServices);
 		return this;
 	}
 
@@ -102,6 +141,9 @@ public class ProofBasedExplPrefs {
 		recursiveExpansionLimit = DEFAULT_RECURSIVE_EXPANSION_LIMIT_;
 		displayedInferencesPerConclusionLimit = DEFAULT_DISPLAYED_INFERENCES_PER_CONCLUSION_LIMIT_;
 		removeUnnecessaryInferences = DEFAULT_REMOVE_UNNECESSARY_INFERENCES_;
+		defaultProofService = DEFAULT_DEFAULT_PROOF_SERVICE_ID_;
+		proofServicesList = DEFAULT_PROOF_SERVICES_LIST_;
+		disabledProofServices = DEFAULT_DISABLED_PROOF_SERVICES_;
 		return this;
 	}
 

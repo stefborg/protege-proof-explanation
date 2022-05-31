@@ -241,7 +241,7 @@ public class ProofManager implements ImportsClosureRecord.ChangeListener,
 	 */
 	public Collection<ProofService> getServices() {
 		List<ProofService> result = new ArrayList<ProofService>();
-		for (ProofService service : proofServiceMan_.getProofServices()) {
+		for (ProofService service : proofServiceMan_.getEnabledProofServices()) {
 			if (service.hasProof(entailment_)) {
 				result.add(service);
 			}

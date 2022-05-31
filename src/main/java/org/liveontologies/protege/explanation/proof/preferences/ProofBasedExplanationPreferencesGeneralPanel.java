@@ -25,29 +25,39 @@ package org.liveontologies.protege.explanation.proof.preferences;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 
 import org.liveontologies.protege.explanation.proof.ProofServiceManager;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
 import org.protege.editor.core.ui.preferences.PreferencesLayoutPanel;
+import org.protege.editor.owl.ui.explanation.SortedPluginsTableModel;
 import org.protege.editor.owl.ui.preferences.OWLPreferencesPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferencesPanel {
 
+	private final Logger logger = LoggerFactory.getLogger(ProofBasedExplanationPreferencesGeneralPanel.class);
+	
 	private static final long serialVersionUID = 8585913940466665136L;
 
 	private SpinnerNumberModel recursiveExpansionLimitModel_,
 			displayedInferencesPerConclusionLimitModel_;
 
 	private JCheckBox removeUnnecessaryInferences_;
+	
+	private SortedPluginsTableModel tableModel_;
 
 	@Override
 	public void initialise() throws Exception {
@@ -74,6 +84,11 @@ public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferences
 				.create();
 		saveTo(prefs);
 		prefs.save();
+		try {
+			ProofServiceManager.get(getOWLEditorKit()).reload();
+		} catch (Exception e) {
+			logger.error("An error occurred while reloading proof service plugins.", e);
+		}
 	}
 
 	private void loadFrom(ProofBasedExplPrefs prefs) {
@@ -82,6 +97,8 @@ public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferences
 				.setValue(prefs.displayedInferencesPerConclusionLimit);
 		removeUnnecessaryInferences_
 				.setSelected(prefs.removeUnnecessaryInferences);
+		tableModel_.setPluginIds(prefs.proofServicesList);
+		tableModel_.setDisabledIds(prefs.disabledProofServices);
 	}
 
 	private void saveTo(ProofBasedExplPrefs prefs) {
@@ -91,25 +108,75 @@ public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferences
 				.getNumber().intValue();
 		prefs.removeUnnecessaryInferences = removeUnnecessaryInferences_
 				.isSelected();
+		prefs.proofServicesList = tableModel_.getPluginIds();
+		prefs.disabledProofServices = tableModel_.getDisabledIds();
 	}
 
 	private void addInstalledProofServicesComponent(
 			PreferencesLayoutPanel panel) throws Exception {
 		panel.addGroup("Installed proof services");
-		DefaultListModel<ProofService> proofServicesModel = new DefaultListModel<>();
 		Collection<ProofService> proofServices = ProofServiceManager
 				.get(getOWLEditorKit()).getProofServices();
+		Map<String, String> nameMap = new HashMap<>();
 		for (ProofService proofService : proofServices) {
-			proofServicesModel.addElement(proofService);
+			nameMap.put(proofService.getPluginId(), proofService.getName());
 		}
-		JList<ProofService> proofServicesList = new JList<>(proofServicesModel);
-		proofServicesList.setToolTipText(
-				"Plugins that provide proofs that are displayed for explanation of entailments");
-		JScrollPane pluginInfoScrollPane = new JScrollPane(proofServicesList);
-		pluginInfoScrollPane.setPreferredSize(new Dimension(300, 100));
-		panel.addGroupComponent(pluginInfoScrollPane);
+		tableModel_ = new SortedPluginsTableModel(nameMap);
+		JTable proofServicesTable = new JTable(tableModel_);
+		proofServicesTable.setToolTipText(
+				"Plugins that provide proofs that are displayed for explanation of entailments. You can disable and enable plugins and change their order using the buttons below.");
+		proofServicesTable.setRowSelectionAllowed(true);
+		proofServicesTable.setColumnSelectionAllowed(false);
+		proofServicesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		proofServicesTable.getColumnModel().getColumn(0).setMaxWidth(20);
+		proofServicesTable.getColumnModel().getColumn(1).setMaxWidth(50);
+		proofServicesTable.getColumnModel().getColumn(2).setMinWidth(300);
+		proofServicesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		JScrollPane pluginTableScrollPane = new JScrollPane(proofServicesTable);
+		pluginTableScrollPane.setPreferredSize(new Dimension(400, 100));
+		panel.addGroupComponent(pluginTableScrollPane);
+		addUpDownButtons(panel, proofServicesTable);
+		panel.addHelpText("<html><p style=\"width:400pt\">The general explanation preferences determine which plugin is used by default when an explanation is requested (either the most recently used one or the first one from the list).</p></html>");
 	}
 
+	private void addUpDownButtons(PreferencesLayoutPanel panel, JTable proofServicesTable) {
+		JButton buttonUp = new JButton("↑ Move up");
+		buttonUp.setToolTipText("Move the selected proof service towards the top of the list");
+		buttonUp.addActionListener(e -> {
+			int rowIndex = proofServicesTable.getSelectedRow();
+			if (rowIndex > 0) {
+				tableModel_.swap(rowIndex - 1, rowIndex);
+			}
+			proofServicesTable.setRowSelectionInterval(rowIndex - 1, rowIndex - 1);
+		});
+
+		JButton buttonDown = new JButton("↓ Move down︎");
+		buttonDown.setToolTipText("Move the selected proof service towards the bottom of the list");
+		buttonDown.addActionListener(e -> {
+			int rowIndex = proofServicesTable.getSelectedRow();
+			if (rowIndex < proofServicesTable.getRowCount() - 1) {
+				tableModel_.swap(rowIndex, rowIndex + 1);
+			}
+			proofServicesTable.setRowSelectionInterval(rowIndex + 1, rowIndex + 1);
+		});
+
+		JPanel buttonsUpDown = new JPanel();
+		buttonsUpDown.add(buttonUp);
+		buttonsUpDown.add(buttonDown);
+		panel.addGroupComponent(buttonsUpDown);
+
+		proofServicesTable.getSelectionModel().addListSelectionListener(e -> {
+			int rowIndex = proofServicesTable.getSelectedRow();
+			if (rowIndex == -1) {
+				buttonUp.setEnabled(false);
+				buttonDown.setEnabled(false);
+			} else {
+				buttonUp.setEnabled(rowIndex > 0);
+				buttonDown.setEnabled(rowIndex < proofServicesTable.getRowCount() - 1);
+			}
+		});
+	}
+	
 	private void addRecursiveExpansionLimitSettings(
 			PreferencesLayoutPanel panel) {
 		panel.addGroup("Recursive expansion limit");

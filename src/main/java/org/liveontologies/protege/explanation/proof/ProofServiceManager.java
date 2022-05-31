@@ -24,7 +24,10 @@ package org.liveontologies.protege.explanation.proof;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
+import org.liveontologies.protege.explanation.proof.preferences.ProofBasedExplPrefs;
 import org.liveontologies.protege.explanation.proof.service.ProofPlugin;
 import org.liveontologies.protege.explanation.proof.service.ProofPluginLoader;
 import org.liveontologies.protege.explanation.proof.service.ProofService;
@@ -45,15 +48,58 @@ public class ProofServiceManager implements Disposable {
 	private final OWLEditorKit kit_;
 
 	private final Collection<ProofService> services_;
+	
+	private final Collection<ProofService> enabledServices_;
 
 	private ProofServiceManager(OWLEditorKit kit) throws Exception {
 		this.kit_ = kit;
-		this.services_ = new ArrayList<ProofService>();
+		this.services_ = new ArrayList<>();
+		this.enabledServices_ = new ArrayList<>();
+		reload();
+	}
+
+	public void reload() throws Exception {
 		ProofPluginLoader loader = new ProofPluginLoader(kit_);
+		// use TreeMap for alphabetical ordering
+		Map<String, ProofService> sortedProofServices = new TreeMap<>();
 		for (ProofPlugin plugin : loader.getPlugins()) {
 			ProofService service = plugin.newInstance();
 			service.initialise();
-			services_.add(service);
+			sortedProofServices.put(service.getPluginId(), service);
+		}
+
+		// add ProofServices in the order defined in the preferences
+		final ProofBasedExplPrefs prefs = ProofBasedExplPrefs.create().load();
+		services_.clear();
+		for (String id : prefs.proofServicesList) {
+			ProofService service = sortedProofServices.get(id);
+			if (service != null) {
+				services_.add(service);
+				sortedProofServices.remove(id);
+			}
+		}
+		
+		if (!sortedProofServices.isEmpty()) {
+			// add new ProofServices (which do not occur in the preferences yet) in
+			// alphabetical order at the end
+			for (ProofService service: sortedProofServices.values()) {
+				services_.add(service);
+			}
+		}
+		
+		// update preferences according to current list (adding new and removing old
+		// ProofServices)
+		prefs.proofServicesList = new ArrayList<>();
+		for (ProofService service : services_) {
+			prefs.proofServicesList.add(service.getPluginId());
+		}
+		prefs.save();
+		
+		enabledServices_.clear();
+		for (ProofService service : services_) {
+			if (!prefs.disabledProofServices.contains(service.getPluginId())) {
+				enabledServices_.add(service);
+			}
 		}
 	}
 
@@ -81,6 +127,10 @@ public class ProofServiceManager implements Disposable {
 
 	public Collection<ProofService> getProofServices() {
 		return services_;
+	}
+	
+	public Collection<ProofService> getEnabledProofServices() {
+		return enabledServices_;
 	}
 
 }
