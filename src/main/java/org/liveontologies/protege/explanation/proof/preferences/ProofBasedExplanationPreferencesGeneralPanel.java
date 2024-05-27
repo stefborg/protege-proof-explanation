@@ -75,7 +75,11 @@ public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferences
 
 	@Override
 	public void dispose() throws Exception {
-		// no op
+		try {
+			ProofServiceManager.get(getOWLEditorKit()).reload();
+		} catch (Exception e) {
+			logger.error("An error occurred while reloading proof service plugins.", e);
+		}
 	}
 
 	@Override
@@ -84,11 +88,6 @@ public class ProofBasedExplanationPreferencesGeneralPanel extends OWLPreferences
 				.create();
 		saveTo(prefs);
 		prefs.save();
-		try {
-			ProofServiceManager.get(getOWLEditorKit()).reload();
-		} catch (Exception e) {
-			logger.error("An error occurred while reloading proof service plugins.", e);
-		}
 	}
 
 	private void loadFrom(ProofBasedExplPrefs prefs) {
